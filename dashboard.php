@@ -41,11 +41,47 @@ function generateTransactionCode() {
 // Query untuk mengambil daftar pengguna
 $query_users = "SELECT users.*, 
     SUM(CASE WHEN payments.status = 'lunas' THEN payments.amount ELSE 0 END) AS total_lunas, 
-    SUM(CASE WHEN payments.status = 'belum dibayar' THEN payments.amount ELSE 0 END) AS total_belum_bayar 
+    SUM(CASE WHEN payments.status = 'belum dibayar' THEN payments.amount ELSE 0 END) AS total_belum_bayar,
+    COUNT(CASE WHEN payments.status = 'belum dibayar' THEN payments.payment_id ELSE NULL END) AS jumlah_belum_bayar 
     FROM users 
     LEFT JOIN payments ON users.user_id = payments.user_id 
     GROUP BY users.user_id";
 $result_users = mysqli_query($koneksi, $query_users);
+
+// Search feature
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$query_payments = "SELECT users.username, payments.amount, payments.invoice_date, payments.kode_transaksi, payments.status, payments.payment_date, payments.payment_id 
+                    FROM users 
+                    LEFT JOIN payments ON users.user_id = payments.user_id 
+                    WHERE users.username LIKE '%$search%' OR payments.kode_transaksi LIKE '%$search%'";
+$result_payments = mysqli_query($koneksi, $query_payments);
+$total_records = mysqli_num_rows($result_payments);
+
+// Batasi jumlah data per halaman
+$records_per_page = 10;
+
+// Hitung jumlah total halaman
+$total_pages = ceil($total_records / $records_per_page);
+
+// Tentukan halaman saat ini
+$current_page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// Pastikan halaman saat ini tidak lebih besar dari total halaman yang tersedia
+if ($current_page > $total_pages) {
+    $current_page = $total_pages;
+}
+
+// Pastikan halaman saat ini tidak kurang dari 1
+if ($current_page < 1) {
+    $current_page = 1;
+}
+
+// Hitung offset untuk query database
+$offset = ($current_page - 1) * $records_per_page;
+
+// Perbarui query untuk menambahkan LIMIT dan OFFSET
+$query_payments .= " LIMIT $offset, $records_per_page";
+$result_payments = mysqli_query($koneksi, $query_payments);
 ?>
 
 <!DOCTYPE html>
@@ -54,6 +90,7 @@ $result_users = mysqli_query($koneksi, $query_users);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - Aplikasi Pencatat Iuran Warga</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .lunas {
             background-color: lightgreen;
@@ -62,93 +99,133 @@ $result_users = mysqli_query($koneksi, $query_users);
 </head>
 <body>
 
-<h2>Dashboard Admin - Aplikasi Pencatat Iuran Warga</h2>
+<div class="container mt-5">
 
-<!-- Form untuk input data tagihan iuran -->
-<h3>Input Data Tagihan Iuran</h3>
-<form action="process_payment.php" method="post">
-    <label for="user_id">Pilih Pengguna:</label><br>
-    <select id="user_id" name="user_id" required>
-        <?php 
-        // Tampilkan daftar pengguna sebagai pilihan dropdown
-        while ($row_users = mysqli_fetch_assoc($result_users)) {
-            echo "<option value='" . $row_users['user_id'] . "'>" . $row_users['username'] . "</option>";
-        }
-        ?>
-    </select><br>
-    <label for="amount">Jumlah Tagihan:</label><br>
-    <input type="number" id="amount" name="amount" required><br><br>
-    <input type="hidden" name="kode_transaksi" value="<?php echo generateTransactionCode(); ?>"> <!-- Tambahkan input hidden untuk kode transaksi -->
-    <input type="submit" value="Input Tagihan">
-</form>
+    <h2 class="mb-4">Dashboard Admin - Aplikasi Pencatat Iuran Warga</h2>
 
-<!-- Form untuk membuat tagihan untuk semua warga -->
-<form action="process_payment_all.php" method="post">
-    <input type="hidden" name="kode_transaksi" value="<?php echo generateTransactionCode(); ?>">
-    <input type="number" name="amount" placeholder="Jumlah Tagihan untuk Semua Warga" required>
-    <input type="submit" value="Input Tagihan untuk Semua Warga">
-</form>
+    <!-- Form untuk input data tagihan iuran -->
+    <h3>Input Data Tagihan Iuran</h3>
+    <form action="process_payment.php" method="post">
+        <div class="form-group">
+            <label for="user_id">Pilih Pengguna:</label>
+            <select id="user_id" name="user_id" class="form-control" required>
+                <?php 
+                // Tampilkan daftar pengguna sebagai pilihan dropdown
+                while ($row_users = mysqli_fetch_assoc($result_users)) {
+                    echo "<option value='" . $row_users['user_id'] . "'>" . $row_users['username'] . "</option>";
+                }
+                ?>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="amount">Jumlah Tagihan:</label>
+            <input type="number" id="amount" name="amount" class="form-control" required>
+        </div>
+        <input type="hidden" name="kode_transaksi" value="<?php echo generateTransactionCode(); ?>"> <!-- Tambahkan input hidden untuk kode transaksi -->
+        <button type="submit" class="btn btn-primary">Input Tagihan</button>
+    </form>
 
-<!-- Menampilkan data tagihan setiap warga -->
-<h3>Data Tagihan Setiap Warga</h3>
-<table border="1">
-    <tr>
-        <th>No</th>
-        <th>Kode Transaksi</th>
-        <th>Nama Pengguna</th>
-        <th>Jumlah Tagihan</th>
-        <th>Status</th>
-        <th>Tgl Tagihan</th>
-        <th>Tgl Pembayaran</th>
-        <th>Aksi</th> <!-- Tambah kolom aksi -->
-    </tr>
-    <?php
-    // Query untuk mengambil data tagihan setiap warga
-    $query_payments = "SELECT users.username, payments.amount,payments.invoice_date,payments.kode_transaksi, payments.status, payments.payment_date, payments.payment_id FROM users LEFT JOIN payments ON users.user_id = payments.user_id";
-    $result_payments = mysqli_query($koneksi, $query_payments);
-    $no = 1;
-    while ($row_payments = mysqli_fetch_assoc($result_payments)) {
-        echo "<tr>";
-        echo "<td>" . $no++ . "</td>";
-        echo "<td>" . $row_payments['kode_transaksi'] . "</td>";
-        echo "<td>" . $row_payments['username'] . "</td>";
-        echo "<td>" . $row_payments['amount'] . "</td>";
-        echo "<td class='" . ($row_payments['status'] === 'lunas' ? 'lunas' : '') . "'>" . $row_payments['status'] . "</td>";
-        echo "<td>" . $row_payments['invoice_date'] . "</td>";
-        echo "<td>" . $row_payments['payment_date'] . "</td>";
-        echo "<td>";
-        echo "<form action='edit_payment.php' method='post'>";
-        echo "<input type='hidden' name='payment_id' value='" . $row_payments['payment_id'] . "'>";
-        echo "<input type='submit' name='edit_payment' value='Edit'>";
-        echo "</form>";
-        echo "</td>";
-        echo "</tr>";
-    }
-    ?>
-</table>
+    <!-- Form untuk membuat tagihan untuk semua warga -->
+    <form action="process_payment_all.php" method="post" class="mt-3">
+        <input type="hidden" name="kode_transaksi" value="<?php echo generateTransactionCode(); ?>">
+        <input type="number" name="amount" placeholder="Jumlah Tagihan untuk Semua Warga" class="form-control" required>
+        <button type="submit" class="btn btn-primary mt-2">Input Tagihan untuk Semua Warga</button>
+    </form>
 
-<!-- Menampilkan total lunas dan belum bayar tiap pengguna -->
-<h3>Total Lunas dan Belum Bayar Tiap Pengguna</h3>
-<table border="1">
-    <tr>
-        <th>No</th>
-        <th>Nama Pengguna</th>
-        <th>Total Lunas</th>
-        <th>Total Belum Bayar</th>
-    </tr>
-    <?php
-    $no = 1;
-    mysqli_data_seek($result_users, 0); // Reset pointer result set
-    while ($row_users = mysqli_fetch_assoc($result_users)) {
-        echo "<tr>";
-        echo "<td>" . $no++ . "</td>";
-        echo "<td>" . $row_users['username'] . "</td>";
-        echo "<td>" . $row_users['total_lunas'] . "</td>";
-        echo "<td>" . $row_users['total_belum_bayar'] . "</td>";
-        echo "</tr>";
-    }
-    ?>
-</table>
+    <!-- Form untuk pencarian -->
+    <form action="" method="GET" class="mt-3">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Cari..." name="search" value="<?php echo $search; ?>">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Cari</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Menampilkan data tagihan setiap warga -->
+    <h3 class="mt-4">Data Tagihan Setiap Warga</h3>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Kode Transaksi</th>
+                <th>Nama Pengguna</th>
+                <th>Jumlah Tagihan</th>
+                <th>Status</th>
+                <th>Tgl Tagihan</th>
+                <th>Tgl Pembayaran</th>
+                <th>Aksi</th> <!-- Tambah kolom aksi -->
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $no = ($current_page - 1) * $records_per_page + 1;
+            while ($row_payments = mysqli_fetch_assoc($result_payments)) {
+                echo "<tr>";
+                echo "<td>" . $no++ . "</td>";
+                echo "<td>" . $row_payments['kode_transaksi'] . "</td>";
+                echo "<td>" . $row_payments['username'] . "</td>";
+                echo "<td>" . $row_payments['amount'] . "</td>";
+                echo "<td class='" . ($row_payments['status'] === 'lunas' ? 'lunas' : '') . "'>" . $row_payments['status'] . "</td>";
+                echo "<td>" . $row_payments['invoice_date'] . "</td>";
+                echo "<td>" . $row_payments['payment_date'] . "</td>";
+                echo "<td>";
+                echo "<form action='edit_payment.php' method='post'>";
+                echo "<input type='hidden' name='payment_id' value='" . $row_payments['payment_id'] . "'>";
+                echo "<button type='submit' name='edit_payment' class='btn btn-primary'>Edit</button>";
+                echo "</form>";
+                echo "</td>";
+                echo "</tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+
+    <!-- Tambahkan navigasi pagination -->
+    <ul class="pagination justify-content-center">
+        <li class="page-item <?php echo $current_page <= 1 ? 'disabled' : ''; ?>">
+            <a class="page-link" href="?page=<?php echo $current_page - 1; ?>">Sebelumnya</a>
+        </li>
+        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+            <li class="page-item <?php echo $current_page == $i ? 'active' : ''; ?>">
+                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+            </li>
+        <?php endfor; ?>
+        <li class="page-item <?php echo $current_page >= $total_pages ? 'disabled' : ''; ?>">
+            <a class="page-link" href="?page=<?php echo $current_page + 1; ?>">Berikutnya</a>
+        </li>
+    </ul>
+
+    <!-- Menampilkan total lunas dan belum bayar tiap pengguna -->
+    <h3 class="mt-4">Total Lunas dan Belum Bayar Tiap Pengguna</h3>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama Pengguna</th>
+                <th>Total Lunas</th>
+                <th>Total Belum Bayar</th>
+                <th>Jumlah Belum Bayar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $no = 1;
+            mysqli_data_seek($result_users, 0); // Reset pointer result set
+            while ($row_users = mysqli_fetch_assoc($result_users)) {
+                echo "<tr>";
+                echo "<td>" . $no++ . "</td>";
+                echo "<td>" . $row_users['username'] . "</td>";
+                echo "<td>" . $row_users['total_lunas'] . "</td>";
+                echo "<td>" . $row_users['total_belum_bayar'] . "</td>";
+                echo "<td>" . $row_users['jumlah_belum_bayar'] . "</td>";
+                echo "</tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+
+</div>
 
 <!-- Tutup koneksi -->
 <?php
