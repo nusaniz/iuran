@@ -142,6 +142,9 @@ $result_payments = mysqli_query($koneksi, $query_payments);
         </div>
     </form>
 
+    <!-- Menampilkan jumlah total data -->
+    <p>Total data: <?php echo $total_records; ?></p>
+
     <!-- Menampilkan data tagihan setiap warga -->
     <h3 class="mt-4">Data Tagihan Setiap Warga</h3>
     <table class="table table-bordered mt-3">
@@ -184,15 +187,15 @@ $result_payments = mysqli_query($koneksi, $query_payments);
     <!-- Tambahkan navigasi pagination -->
     <ul class="pagination justify-content-center">
         <li class="page-item <?php echo $current_page <= 1 ? 'disabled' : ''; ?>">
-            <a class="page-link" href="?page=<?php echo $current_page - 1; ?>">Sebelumnya</a>
+            <a class="page-link" href="?page=<?php echo $current_page - 1 . ($search ? '&search=' . $search : ''); ?>">Sebelumnya</a>
         </li>
         <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
             <li class="page-item <?php echo $current_page == $i ? 'active' : ''; ?>">
-                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                <a class="page-link" href="?page=<?php echo $i . ($search ? '&search=' . $search : ''); ?>"><?php echo $i; ?></a>
             </li>
         <?php endfor; ?>
         <li class="page-item <?php echo $current_page >= $total_pages ? 'disabled' : ''; ?>">
-            <a class="page-link" href="?page=<?php echo $current_page + 1; ?>">Berikutnya</a>
+            <a class="page-link" href="?page=<?php echo $current_page + 1 . ($search ? '&search=' . $search : ''); ?>">Berikutnya</a>
         </li>
     </ul>
 
