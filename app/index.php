@@ -31,7 +31,7 @@ $pages = array(
     'edit' => 'edit_payment.php',
     'edituser' => 'edit_booking.php',
     'add' => 'add.php',
-    'logout' => '../logout.php'
+    'logout' => 'logout.php'
 );
 
 // Cek apakah halaman yang diminta ada dalam daftar halaman
