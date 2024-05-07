@@ -103,7 +103,7 @@ $total_nominal_lunas = $row_lunas['total_nominal_lunas'];
                 $end_from = min($start_from + $records_per_page, $total_rows);
                 ?>
                 <p>Menampilkan <?php echo $start_from + 1; ?> sampai <?php echo $end_from; ?> dari <?php echo $total_rows; ?> data</p>
-                <table class="table">
+                <table class="table table-bordered">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">No</th>
