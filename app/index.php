@@ -19,6 +19,7 @@ $sidebar_menu = array(
     'home' => 'Home',
     'tagihan' => 'Tagihan',
     'user' => 'User',
+    'add' => 'Add',
     'logout' => 'Logout'
 );
 
@@ -28,6 +29,8 @@ $pages = array(
     'tagihan' => 'tagihan.php',
     'user' => 'admin.php',
     'edit' => 'edit_payment.php',
+    'edituser' => 'edit_booking.php',
+    'add' => 'add.php',
     'logout' => '../logout.php'
 );
 

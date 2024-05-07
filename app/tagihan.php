@@ -11,8 +11,6 @@ if ($_SESSION['role'] !== 'admin') {
     exit();
 }
 
-
-
 // Koneksi ke database (ganti sesuai dengan pengaturan Anda)
 $host = "localhost";
 $db_username = "root";
@@ -26,64 +24,46 @@ if (mysqli_connect_errno()) {
     exit();
 }
 
-// Fungsi untuk generate kode transaksi otomatis
-function generateTransactionCode($koneksi) {
-    // Mendapatkan tanggal dan waktu saat ini
-    $currentDateTime = date("YmdHis");
+// Pagination
+$records_per_page = 10;
+$current_page = isset($_GET['pagee']) && is_numeric($_GET['pagee']) ? (int)$_GET['pagee'] : 1;
 
-    // Mendapatkan beberapa karakter acak untuk menambahkan ke kode transaksi
-    $randomChars = substr(md5(uniqid(mt_rand(), true)), 0, 4);
-
-    // Menggabungkan tanggal, waktu, dan karakter acak untuk membuat kode transaksi
-    $transactionCode = "TRX-" . $currentDateTime . "-" . $randomChars;
-
-    // Periksa keberadaan kode transaksi dalam database
-    $query_check_duplicate = "SELECT COUNT(*) AS total FROM payments WHERE kode_transaksi='$transactionCode'";
-    $result_check_duplicate = mysqli_query($koneksi, $query_check_duplicate);
-    $row_check_duplicate = mysqli_fetch_assoc($result_check_duplicate);
-    $total_duplicates = $row_check_duplicate['total'];
-
-    // Jika kode transaksi duplikat, panggil fungsi kembali untuk menghasilkan kode baru
-    if ($total_duplicates > 0) {
-        return generateTransactionCode($koneksi);
-    } else {
-        return $transactionCode;
-    }
+// Tambahkan logika pencarian jika ada kata kunci pencarian yang diberikan
+$where_clause = "";
+$search_keyword = "";
+if(isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
+    $keyword = mysqli_real_escape_string($koneksi, $_GET['keyword']);
+    $where_clause = " WHERE username LIKE '%$keyword%'";
+    $search_keyword = "&keyword=" . urlencode($keyword);
 }
 
-// Search feature untuk tabel Total Lunas dan Belum Bayar Tiap Pengguna
-$search_users = isset($_GET['search_users']) ? $_GET['search_users'] : '';
+// Query untuk mengambil jumlah total data sesuai dengan kriteria pencarian
+$query_count = "SELECT COUNT(*) AS total_records FROM users" . $where_clause;
+$result_count = mysqli_query($koneksi, $query_count);
+$row_count = mysqli_fetch_assoc($result_count);
+$total_records = $row_count['total_records'];
 
-// Query untuk mengambil daftar pengguna dengan filter pencarian
+// Menghitung total halaman berdasarkan jumlah total data yang sesuai dengan kriteria pencarian
+$total_pages = ceil($total_records / $records_per_page);
+
+// Menyesuaikan halaman saat ini agar tidak melampaui halaman terakhir setelah pencarian
+$current_page = min($current_page, $total_pages);
+
+// Menghitung offset kembali berdasarkan halaman saat ini
+$offset = ($current_page - 1) * $records_per_page;
+
+// Query untuk mengambil daftar pengguna dengan total lunas, total belum bayar, dan jumlah belum bayar sesuai dengan kriteria pencarian
 $query_users = "SELECT users.*, 
     SUM(CASE WHEN payments.status = 'lunas' THEN payments.amount ELSE 0 END) AS total_lunas, 
     SUM(CASE WHEN payments.status = 'belum dibayar' THEN payments.amount ELSE 0 END) AS total_belum_bayar,
     COUNT(CASE WHEN payments.status = 'belum dibayar' THEN payments.payment_id ELSE NULL END) AS jumlah_belum_bayar 
     FROM users 
-    LEFT JOIN payments ON users.user_id = payments.user_id ";
-
-// Tambahkan kondisi pencarian jika ada
-if ($search_users != '') {
-    $query_users .= "WHERE users.username LIKE '%$search_users%'";
-}
-
-$query_users .= " GROUP BY users.user_id";
+    LEFT JOIN payments ON users.user_id = payments.user_id "
+    . $where_clause .
+    "GROUP BY users.user_id
+    LIMIT $offset, $records_per_page";
 
 $result_users = mysqli_query($koneksi, $query_users);
-
-// Total data yang sesuai dengan hasil pencarian
-$total_records_search = mysqli_num_rows($result_users);
-
-// Pagination
-$records_per_page = 10;
-$total_pages = ceil($total_records_search / $records_per_page);
-$current_page = isset($_GET['halaman']) && is_numeric($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
-$current_page = max(1, min($total_pages, $current_page));
-$offset = ($current_page - 1) * $records_per_page;
-
-$query_users .= " LIMIT $offset, $records_per_page";
-$result_users = mysqli_query($koneksi, $query_users);
-
 ?>
 
 <!DOCTYPE html>
@@ -105,20 +85,18 @@ $result_users = mysqli_query($koneksi, $query_users);
 
     <h2 class="mb-4">Dashboard Admin - Aplikasi Pencatat Iuran Warga</h2>
 
-    <!-- Form untuk pencarian pada tabel Total Lunas dan Belum Bayar Tiap Pengguna -->
-    <form action="" method="GET" class="mt-3">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Cari..." name="search_users" value="<?php echo $search_users; ?>">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="submit">Cari</button>
-            </div>
+    <!-- Formulir Pencarian -->
+    <form method="GET" action="index.php">
+        <input type="hidden" name="page" value="tagihan">
+        <div class="form-group">
+            <input type="text" class="form-control" name="keyword" placeholder="Cari Nama Pengguna">
         </div>
+        <button type="submit" class="btn btn-primary">Cari</button>
     </form>
-
 
     <!-- Menampilkan total lunas dan belum bayar tiap pengguna -->
     <h3 class="mt-4">Total Lunas dan Belum Bayar Tiap Pengguna</h3>
-    <p>Total data: <?php echo $total_records_search; ?></p>
+    <p>Total data: <?php echo $total_records; ?></p>
     <table class="table table-bordered mt-3">
         <thead>
             <tr>
@@ -148,15 +126,15 @@ $result_users = mysqli_query($koneksi, $query_users);
     <!-- Pagination -->
     <ul class="pagination justify-content-center">
         <li class="page-item <?php echo $current_page <= 1 ? 'disabled' : ''; ?>">
-            <a class="page-link" href="index.php?page=tagihan&halaman=<?php echo $current_page - 1 . ($search_users ? '&search_users=' . $search_users : ''); ?>">Sebelumnya</a>
+            <a class="page-link" href="index.php?page=tagihan&pagee=<?php echo $current_page - 1 . $search_keyword; ?>">Sebelumnya</a>
         </li>
         <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
             <li class="page-item <?php echo $current_page == $i ? 'active' : ''; ?>">
-                <a class="page-link" href="index.php?page=tagihan&halaman=<?php echo $i . ($search_users ? '&search_users=' . $search_users : ''); ?>"><?php echo $i; ?></a>
+                <a class="page-link" href="index.php?page=tagihan&pagee=<?php echo $i . $search_keyword; ?>"><?php echo $i; ?></a>
             </li>
         <?php endfor; ?>
         <li class="page-item <?php echo $current_page >= $total_pages ? 'disabled' : ''; ?>">
-            <a class="page-link" href="index.php?page=tagihan&halaman=<?php echo $current_page + 1 . ($search_users ? '&search_users=' . $search_users : ''); ?>">Berikutnya</a>
+            <a class="page-link" href="index.php?page=tagihan&pagee=<?php echo $current_page + 1 . $search_keyword; ?>">Berikutnya</a>
         </li>
     </ul>
 </div>
