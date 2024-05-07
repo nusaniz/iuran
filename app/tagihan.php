@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
@@ -7,9 +7,11 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if ($_SESSION['role'] !== 'admin') {
-    header("Location: user_dashboard.php");
+    header("Location: ../user_dashboard.php");
     exit();
 }
+
+
 
 // Koneksi ke database (ganti sesuai dengan pengaturan Anda)
 $host = "localhost";
@@ -113,6 +115,7 @@ $result_users = mysqli_query($koneksi, $query_users);
         </div>
     </form>
 
+
     <!-- Menampilkan total lunas dan belum bayar tiap pengguna -->
     <h3 class="mt-4">Total Lunas dan Belum Bayar Tiap Pengguna</h3>
     <p>Total data: <?php echo $total_records_search; ?></p>
@@ -145,18 +148,17 @@ $result_users = mysqli_query($koneksi, $query_users);
     <!-- Pagination -->
     <ul class="pagination justify-content-center">
         <li class="page-item <?php echo $current_page <= 1 ? 'disabled' : ''; ?>">
-            <a class="page-link" href="admin.php?page=tagihan&halaman=<?php echo $current_page - 1 . ($search_users ? '&search_users=' . $search_users : ''); ?>">Sebelumnya</a>
+            <a class="page-link" href="index.php?page=tagihan&halaman=<?php echo $current_page - 1 . ($search_users ? '&search_users=' . $search_users : ''); ?>">Sebelumnya</a>
         </li>
         <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
             <li class="page-item <?php echo $current_page == $i ? 'active' : ''; ?>">
-                <a class="page-link" href="admin.php?page=tagihan&halaman=<?php echo $i . ($search_users ? '&search_users=' . $search_users : ''); ?>"><?php echo $i; ?></a>
+                <a class="page-link" href="index.php?page=tagihan&halaman=<?php echo $i . ($search_users ? '&search_users=' . $search_users : ''); ?>"><?php echo $i; ?></a>
             </li>
         <?php endfor; ?>
         <li class="page-item <?php echo $current_page >= $total_pages ? 'disabled' : ''; ?>">
-            <a class="page-link" href="admin.php?page=tagihan&halaman=<?php echo $current_page + 1 . ($search_users ? '&search_users=' . $search_users : ''); ?>">Berikutnya</a>
+            <a class="page-link" href="index.php?page=tagihan&halaman=<?php echo $current_page + 1 . ($search_users ? '&search_users=' . $search_users : ''); ?>">Berikutnya</a>
         </li>
     </ul>
-
 </div>
 
 <!-- Tutup koneksi -->

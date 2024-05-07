@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     echo "Tagihan untuk semua warga berhasil dibuat.";
+    header("Location: index.php?page=home");
 
     // Tutup koneksi
     mysqli_close($koneksi);

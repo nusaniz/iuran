@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
@@ -197,7 +197,7 @@ $result_payments = mysqli_query($koneksi, $query_payments);
                 echo "<td>" . $row_payments['payment_date'] . "</td>";
                 echo "<td>";
                 // echo "<form action='edit_payment.php' method='post'>";
-                echo "<form action='admin.php?page=edit' method='post'>";
+                echo "<form action='index.php?page=edit' method='post'>";
                 echo "<input type='hidden' name='payment_id' value='" . $row_payments['payment_id'] . "'>";
                 echo "<button type='submit' name='edit_payment' class='btn btn-primary'>Edit</button>";
                 echo "</form>";

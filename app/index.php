@@ -1,4 +1,16 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
+
+if ($_SESSION['role'] !== 'admin') {
+    header("Location: ../user_dashboard.php");
+    exit();
+}
+
 // Inisialisasi halaman default jika parameter page tidak diberikan
 $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 
@@ -6,7 +18,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 $sidebar_menu = array(
     'home' => 'Home',
     'tagihan' => 'Tagihan',
-    'edit' => 'Edit',
+    'user' => 'User',
     'logout' => 'Logout'
 );
 
@@ -14,8 +26,9 @@ $sidebar_menu = array(
 $pages = array(
     'home' => 'dashboard.php',
     'tagihan' => 'tagihan.php',
+    'user' => 'admin.php',
     'edit' => 'edit_payment.php',
-    'logout' => 'logout.php'
+    'logout' => '../logout.php'
 );
 
 // Cek apakah halaman yang diminta ada dalam daftar halaman

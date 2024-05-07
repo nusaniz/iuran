@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query = "INSERT INTO payments (user_id, amount, kode_transaksi, invoice_date) VALUES ('$user_id', '$amount', '$kode_transaksi', '$invoice_date')"; // Menambahkan kolom kode_transaksi dan invoice_date ke dalam query
     if (mysqli_query($koneksi, $query)) {
         echo "Data tagihan berhasil ditambahkan.";
+        header("Location: index.php?page=home");
 
         // Update invoice_date jika status lunas
         $status = "belum dibayar"; // Ubah status sesuai dengan kondisi aplikasi Anda

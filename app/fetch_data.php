@@ -53,7 +53,7 @@ while ($row_status = $result_status->fetch_assoc()) {
 $sql = "SELECT * FROM users LIMIT $offset, $show";
 if (isset($_POST['search'])) {
     $search = $_POST['search'];
-    $sql = "SELECT * FROM users WHERE username LIKE '%$search%' OR kode_booking LIKE '%$search%' LIMIT $offset, $show";
+    $sql = "SELECT * FROM users WHERE username LIKE '%$search%' OR role LIKE '%$search%' LIMIT $offset, $show";
 }
 $result = $conn->query($sql);
 

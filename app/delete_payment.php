@@ -32,7 +32,7 @@ if (isset($_POST['delete_payment'])) {
 
     if (mysqli_query($koneksi, $query_delete_payment)) {
         echo "Data pembayaran berhasil dihapus.";
-        header("Location: admin.php?page=home&&hapus=ok");
+        header("Location: index.php?page=home&&hapus=ok");
     } else {
         echo "Gagal menghapus data pembayaran: " . mysqli_error($koneksi);
     }
