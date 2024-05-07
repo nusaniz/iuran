@@ -61,10 +61,7 @@ $result_users = mysqli_query($koneksi, $query_users);
 
 // Search feature
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$query_payments = "SELECT users.username, payments.amount, payments.invoice_date, payments.kode_transaksi, payments.status, payments.payment_date, payments.payment_id 
-                    FROM users 
-                    LEFT JOIN payments ON users.user_id = payments.user_id 
-                    WHERE users.username LIKE '%$search%' OR payments.kode_transaksi LIKE '%$search%'";
+$query_payments = "SELECT users.username, payments.amount, payments.invoice_date, payments.kode_transaksi, payments.status, payments.payment_date, payments.payment_id FROM payments LEFT JOIN users ON payments.user_id = users.user_id WHERE users.username LIKE '%$search%' OR payments.kode_transaksi LIKE '%$search%'";
 $result_payments = mysqli_query($koneksi, $query_payments);
 $total_records = mysqli_num_rows($result_payments);
 
@@ -113,6 +110,21 @@ $result_payments = mysqli_query($koneksi, $query_payments);
 <div class="container mt-5">
 
     <h2 class="mb-4">Dashboard Admin - Aplikasi Pencatat Iuran Warga</h2>
+
+    <?php
+    if (isset($_GET['hapus'])) {
+        $hapus = $_GET['hapus'];
+        
+        if ($hapus === 'ok') {
+            echo "<div class='alert alert-success' role='alert'>Hapus berhasil!</div>";
+        }
+    }
+    
+    
+    ?>
+
+    
+
 
     <!-- Form untuk input data tagihan iuran -->
     <h3>Input Data Tagihan Iuran</h3>
@@ -168,6 +180,7 @@ $result_payments = mysqli_query($koneksi, $query_payments);
                 <th>Status</th>
                 <th>Tgl Tagihan</th>
                 <th>Tgl Pembayaran</th>
+                <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -182,6 +195,17 @@ $result_payments = mysqli_query($koneksi, $query_payments);
                 echo "<td class='" . ($row_payments['status'] === 'lunas' ? 'lunas' : '') . "'>" . $row_payments['status'] . "</td>";
                 echo "<td>" . $row_payments['invoice_date'] . "</td>";
                 echo "<td>" . $row_payments['payment_date'] . "</td>";
+                echo "<td>";
+                // echo "<form action='edit_payment.php' method='post'>";
+                echo "<form action='admin.php?page=edit' method='post'>";
+                echo "<input type='hidden' name='payment_id' value='" . $row_payments['payment_id'] . "'>";
+                echo "<button type='submit' name='edit_payment' class='btn btn-primary'>Edit</button>";
+                echo "</form>";
+                echo "<form action='delete_payment.php' method='post' class='mt-1'>";
+                echo "<input type='hidden' name='payment_id' value='" . $row_payments['payment_id'] . "'>";
+                echo "<button type='submit' name='delete_payment' class='btn btn-danger'>Hapus</button>";
+                echo "</form>";
+                echo "</td>";
                 echo "</tr>";
             }
             ?>

@@ -5,16 +5,16 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 // Daftar menu sidebar beserta linknya
 $sidebar_menu = array(
     'home' => 'Home',
-    'profile' => 'Profile',
-    'settings' => 'Settings',
+    'tagihan' => 'Tagihan',
+    'edit' => 'Edit',
     'logout' => 'Logout'
 );
 
 // Daftar halaman yang sesuai dengan menu
 $pages = array(
     'home' => 'dashboard.php',
-    'profile' => 'profile.php',
-    'settings' => 'settings.php',
+    'tagihan' => 'tagihan.php',
+    'edit' => 'edit_payment.php',
     'logout' => 'logout.php'
 );
 

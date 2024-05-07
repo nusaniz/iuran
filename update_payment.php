@@ -41,4 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     // Tutup koneksi
     mysqli_close($koneksi);
 }
+
+header("Location: admin.php?page=home");
 ?>

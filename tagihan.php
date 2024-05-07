@@ -75,7 +75,7 @@ $total_records_search = mysqli_num_rows($result_users);
 // Pagination
 $records_per_page = 10;
 $total_pages = ceil($total_records_search / $records_per_page);
-$current_page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+$current_page = isset($_GET['halaman']) && is_numeric($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
 $current_page = max(1, min($total_pages, $current_page));
 $offset = ($current_page - 1) * $records_per_page;
 
@@ -145,15 +145,15 @@ $result_users = mysqli_query($koneksi, $query_users);
     <!-- Pagination -->
     <ul class="pagination justify-content-center">
         <li class="page-item <?php echo $current_page <= 1 ? 'disabled' : ''; ?>">
-            <a class="page-link" href="?page=<?php echo $current_page - 1 . ($search_users ? '&search_users=' . $search_users : ''); ?>">Sebelumnya</a>
+            <a class="page-link" href="admin.php?page=tagihan&halaman=<?php echo $current_page - 1 . ($search_users ? '&search_users=' . $search_users : ''); ?>">Sebelumnya</a>
         </li>
         <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
             <li class="page-item <?php echo $current_page == $i ? 'active' : ''; ?>">
-                <a class="page-link" href="?page=<?php echo $i . ($search_users ? '&search_users=' . $search_users : ''); ?>"><?php echo $i; ?></a>
+                <a class="page-link" href="admin.php?page=tagihan&halaman=<?php echo $i . ($search_users ? '&search_users=' . $search_users : ''); ?>"><?php echo $i; ?></a>
             </li>
         <?php endfor; ?>
         <li class="page-item <?php echo $current_page >= $total_pages ? 'disabled' : ''; ?>">
-            <a class="page-link" href="?page=<?php echo $current_page + 1 . ($search_users ? '&search_users=' . $search_users : ''); ?>">Berikutnya</a>
+            <a class="page-link" href="admin.php?page=tagihan&halaman=<?php echo $current_page + 1 . ($search_users ? '&search_users=' . $search_users : ''); ?>">Berikutnya</a>
         </li>
     </ul>
 
