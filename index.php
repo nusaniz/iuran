@@ -48,22 +48,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Aplikasi Pencatat Iuran Warga</title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+            <!-- Font Awesome CSS -->
+            <link rel="stylesheet" href="fontawesome/css/all.min.css">
 </head>
 <body>
 
-<h2>Login - Aplikasi Pencatat Iuran Warga</h2>
+<!-- <h2>Login - Aplikasi Pencatat Iuran Warga</h2> -->
 
 <?php if (isset($error_message)) : ?>
     <p style="color: red;"><?php echo $error_message; ?></p>
 <?php endif; ?>
 
-<form action="index.php" method="post">
-    <label for="username">Username:</label><br>
-    <input type="text" id="username" name="username" required><br>
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password" required><br><br>
-    <input type="submit" value="Login">
-</form>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 col-sm-8 col-md-6 col-lg-4">
+            <h2 class="text-center mt-4 mb-4">Dusun Songgat</h2>
+            <h2 class="text-center mt-4 mb-4">Login</h2>
+            <form action="index.php" method="post">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
