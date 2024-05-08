@@ -98,7 +98,7 @@ $result_users = mysqli_query($koneksi, $query_users);
     <h3 class="mt-4">Total Lunas dan Belum Bayar Tiap Pengguna</h3>
     <p>Total data: <?php echo $total_records; ?></p>
     <table class="table table-bordered mt-3">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 <th>No</th>
                 <th>Nama Pengguna</th>

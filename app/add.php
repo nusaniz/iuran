@@ -62,25 +62,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <link rel="stylesheet" href="../fontawesome/css/all.min.css">
 </head>
 <body>
-    <h2>Tambah Data Baru</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="username">Nama:</label>
-            <input type="text" class="form-control" id="username" name="username">
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password" name="password">
-        </div>
-        <div class="form-group">
-            <label for="role">Role:</label>
-            <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
-            </select>
-        </div>
-    <!-- <input type="text" class="form-control" id="role" name="role" value="<?php echo $role; ?>"> -->
-        <button type="submit" class="btn btn-primary">Tambah Data</button>
-    </form>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h2>Tambah Data Baru</h2>
+      <form method="POST" enctype="multipart/form-data">
+          <div class="form-group">
+              <label for="username">Nama:</label>
+              <input type="text" class="form-control" id="username" name="username">
+          </div>
+          <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" class="form-control" id="password" name="password">
+          </div>
+          <div class="form-group">
+              <label for="role">Role:</label>
+              <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
+                  <option value="admin">Admin</option>
+                  <option value="user">User</option>
+              </select>
+          </div>
+      <!-- <input type="text" class="form-control" id="role" name="role" value="<?php echo $role; ?>"> -->
+          <button type="submit" class="btn btn-primary">Tambah Data</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+    
 </body>
 </html>

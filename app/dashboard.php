@@ -66,7 +66,7 @@ $result_payments = mysqli_query($koneksi, $query_payments);
 $total_records = mysqli_num_rows($result_payments);
 
 // Batasi jumlah data per halaman
-$records_per_page = 10;
+$records_per_page = 5;
 
 // Hitung jumlah total halaman
 $total_pages = ceil($total_records / $records_per_page);
@@ -171,7 +171,7 @@ $result_payments = mysqli_query($koneksi, $query_payments);
     <!-- Menampilkan data tagihan setiap warga -->
     <h3 class="mt-4">Data Tagihan Setiap Warga</h3>
     <table class="table table-bordered mt-3">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 <th>No</th>
                 <th>Kode Transaksi</th>
@@ -230,7 +230,7 @@ $result_payments = mysqli_query($koneksi, $query_payments);
     <!-- Menampilkan total lunas dan belum bayar tiap pengguna -->
     <h3 class="mt-4">Total Lunas dan Belum Bayar Tiap Pengguna</h3>
     <table class="table table-bordered mt-3">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 <th>No</th>
                 <th>Nama Pengguna</th>

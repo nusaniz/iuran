@@ -33,7 +33,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Data Booking</h1>
+        <h1>Data User</h1>
         <!-- <h3>Data Tabel</h3> -->
         <div class="row mt-4">
             <div class="col-md-6">
@@ -52,9 +52,12 @@
                 </div>
             </div>
         </div>
+
+        <a href="index.php?page=add" class="btn btn-primary btn-sm">Tambah Data User</a>
+
         <div class="table-responsive mt-4">
             <table class="table table-bordered table-hover">
-                <thead>
+                <thead class="thead-dark">
                     <tr class="text-center">
                         <th>No</th>
                         <!-- <th>Kode Booking</th> -->

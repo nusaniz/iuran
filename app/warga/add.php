@@ -9,8 +9,24 @@
 <body>
 
 <div class="container">
+    <?php if (
+        isset($_GET["page"]) &&
+        isset($_GET["add"]) &&
+        $_GET["page"] == "addwarga" &&
+        $_GET["add"] == "ok"
+    ) {
+        echo '<div class="alert alert-success mt-3" role="alert">Data warga berhasil ditambahkan.</div>';
+    } ?>
+
+    <!-- <?php if (isset($_GET["page"]) && $_GET["add"] == "ok") {
+        echo '<div class="alert alert-success mt-3" role="alert">Data warga berhasil ditambahkan.</div>';
+    } ?> -->
+
     <h2 class="mt-4">Formulir Tambah Data Warga</h2>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <!-- <form method="post" action="<?php echo htmlspecialchars(
+        $_SERVER["PHP_SELF"]
+    ); ?>"> -->
+    <form method="post" action="">
         <div class="form-group">
             <label for="nik">NIK:</label>
             <input type="text" class="form-control" id="nik" name="nik">
@@ -39,7 +55,7 @@
 $host = "localhost";
 $db_username = "root";
 $db_password = "";
-$database = "db_warga";
+$database = "db_iuran";
 $koneksi = mysqli_connect($host, $db_username, $db_password, $database);
 
 // Cek koneksi
@@ -49,24 +65,28 @@ if (mysqli_connect_errno()) {
 
 // Proses input data warga
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nik = $_POST['nik'];
-    $nama_lengkap = $_POST['nama_lengkap'];
-    $no_hp = $_POST['no_hp'];
-    $alamat = $_POST['alamat'];
+    $nik = $_POST["nik"];
+    $nama_lengkap = $_POST["nama_lengkap"];
+    $no_hp = $_POST["no_hp"];
+    $alamat = $_POST["alamat"];
 
     // Query untuk memasukkan data ke tabel warga
     $query = "INSERT INTO tb_warga (nik, nama_lengkap, no_hp, alamat) VALUES ('$nik', '$nama_lengkap', '$no_hp', '$alamat')";
 
     if (mysqli_query($koneksi, $query)) {
         echo '<script>alert("Data warga berhasil ditambahkan.");</script>';
-        header("Location: index.php");
+        // header("Location: index.php");
+        header("Location: index.php?page=addwarga&&add=ok");
     } else {
-        echo '<script>alert("Error: ' . $query . '\n' . mysqli_error($koneksi) . '");</script>';
+        echo '<script>alert("Error: ' .
+            $query .
+            '\n' .
+            mysqli_error($koneksi) .
+            '");</script>';
     }
 }
 ?>
 
-<?php
-// Tutup koneksi
+<?php // Tutup koneksi
 mysqli_close($koneksi);
 ?>
