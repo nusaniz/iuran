@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 08 Bulan Mei 2024 pada 03.40
+-- Waktu pembuatan: 08 Bulan Mei 2024 pada 05.49
 -- Versi server: 10.4.25-MariaDB
 -- Versi PHP: 8.1.10
 
@@ -42,9 +42,7 @@ CREATE TABLE `tb_payments` (
 --
 
 INSERT INTO `tb_payments` (`payment_id`, `user_id`, `amount`, `payment_date`, `status`, `kode_transaksi`, `invoice_date`) VALUES
-(2, 94, '5000', '2024-05-07 14:35:09', 'lunas', 'TRX-20240507163509-6', '2024-05-07 09:35:09'),
-(4, 94, '5000', '2024-05-07 14:39:00', 'lunas', 'TRX-20240507163900-5', '2024-05-07 09:39:00'),
-(6, 94, '5000', '2024-05-07 14:39:07', 'belum dibayar', 'TRX-20240507163907-3', '2024-05-07 09:39:07'),
+(6, 94, '5000', '2024-05-07 14:39:07', 'lunas', 'TRX-20240507163907-3', '2024-05-07 09:39:07'),
 (7, 1, '3', '2024-05-07 14:41:57', 'belum dibayar', 'TRX-20240507164157-a', '2024-05-07 09:41:57'),
 (8, 94, '3', '2024-05-07 14:41:57', 'belum dibayar', 'TRX-20240507164157-2', '2024-05-07 09:41:57'),
 (9, 1, '3', '2024-05-07 14:42:03', 'belum dibayar', 'TRX-20240507164203-b', '2024-05-07 09:42:03'),
@@ -57,12 +55,16 @@ INSERT INTO `tb_payments` (`payment_id`, `user_id`, `amount`, `payment_date`, `s
 (16, 94, '5', '2024-05-07 14:42:32', 'belum dibayar', 'TRX-20240507164232-e', '2024-05-07 09:42:32'),
 (17, 1, '3', '2024-05-07 14:42:36', 'belum dibayar', 'TRX-20240507164236-3', '2024-05-07 09:42:36'),
 (18, 94, '3', '2024-05-07 14:42:36', 'belum dibayar', 'TRX-20240507164236-5', '2024-05-07 09:42:36'),
-(19, 1, '5', '2024-05-07 14:42:38', 'belum dibayar', 'TRX-20240507164238-7', '2024-05-07 09:42:38'),
 (20, 94, '5', '2024-05-07 14:42:38', 'belum dibayar', 'TRX-20240507164238-a', '2024-05-07 09:42:38'),
 (21, 1, '5', '2024-05-07 14:42:40', 'belum dibayar', 'TRX-20240507164240-7', '2024-05-07 09:42:40'),
 (22, 94, '5', '2024-05-07 14:42:40', 'belum dibayar', 'TRX-20240507164240-d', '2024-05-07 09:42:40'),
 (23, 1, '5', '2024-05-07 14:42:42', 'belum dibayar', 'TRX-20240507164242-7', '2024-05-07 09:42:42'),
-(24, 94, '5', '2024-05-07 14:42:42', 'belum dibayar', 'TRX-20240507164242-8', '2024-05-07 09:42:42');
+(24, 94, '5', '2024-05-07 14:42:42', 'belum dibayar', 'TRX-20240507164242-8', '2024-05-07 09:42:42'),
+(25, 1, '2', '2024-05-08 03:26:48', 'belum dibayar', 'TRX-20240508052638-9', '2024-05-07 22:26:48'),
+(26, 1, '9999999999', '2024-05-08 03:26:54', 'belum dibayar', 'TRX-20240508052648-d', '2024-05-07 22:26:54'),
+(28, 1, '1212', '2024-05-08 03:28:29', 'belum dibayar', 'TRX-20240508052829-b', '2024-05-07 22:28:29'),
+(29, 94, '1212', '2024-05-08 03:28:29', 'belum dibayar', 'TRX-20240508052829-1', '2024-05-07 22:28:29'),
+(30, 97, '1212', '2024-05-08 03:28:29', 'belum dibayar', 'TRX-20240508052829-d', '2024-05-07 22:28:29');
 
 -- --------------------------------------------------------
 
@@ -86,7 +88,7 @@ CREATE TABLE `tb_users` (
 INSERT INTO `tb_users` (`user_id`, `username`, `password`, `role`, `total_lunas`, `total_belum_bayar`) VALUES
 (1, 'admin', '', 'admin', '0.00', '0.00'),
 (94, 'intan', '', 'user', '0.00', '0.00'),
-(97, 'hanum', '', 'admin', '0.00', '0.00');
+(97, 'hanum', '', 'user', '0.00', '0.00');
 
 -- --------------------------------------------------------
 
@@ -137,10 +139,7 @@ INSERT INTO `tb_warga` (`id`, `nik`, `nama_lengkap`, `no_hp`, `alamat`, `created
 (32, '7890123456', 'Emily King', '017890123456', 'Jl. Contoh No. 789', '2024-05-07 18:02:31'),
 (33, '8901234567', 'Brian Scott', '018901234567', 'Jl. Contoh No. 890', '2024-05-07 18:02:31'),
 (34, '9012345678', 'Jessica Perez', '019012345678', 'Jl. Contoh No. 901', '2024-05-07 18:02:31'),
-(35, '0123456789', 'Nicole Nguyen', '020123456789', 'Jl. Contoh No. 012', '2024-05-07 18:02:31'),
-(38, '21', 'hanum', 'asd', 'asd', '2024-05-08 00:32:26'),
-(39, '', 'permata', '', '', '2024-05-08 01:09:53'),
-(40, '', 'elya', '', '', '2024-05-08 01:11:26');
+(35, '0123456789', 'Nicole Nguyen', '020123456789', 'Jl. Contoh No. 012', '2024-05-07 18:02:31');
 
 --
 -- Indexes for dumped tables
@@ -174,19 +173,19 @@ ALTER TABLE `tb_warga`
 -- AUTO_INCREMENT untuk tabel `tb_payments`
 --
 ALTER TABLE `tb_payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_users`
 --
 ALTER TABLE `tb_users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_warga`
 --
 ALTER TABLE `tb_warga`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
