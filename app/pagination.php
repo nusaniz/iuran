@@ -10,4 +10,7 @@ for ($i = 1; $i <= $total_pages; $i++) {
 }
 
 echo "<li class='page-item " . ($next > $total_pages ? 'disabled' : '') . "'><a class='page-link' href='index.php?page=user&&hal=$next&show=$show'>Next</a></li>";
+
+
+
 ?>
