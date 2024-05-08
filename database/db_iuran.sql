@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 08 Bulan Mei 2024 pada 03.30
+-- Waktu pembuatan: 08 Bulan Mei 2024 pada 03.40
 -- Versi server: 10.4.25-MariaDB
 -- Versi PHP: 8.1.10
 
@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `payments`
+-- Struktur dari tabel `tb_payments`
 --
 
-CREATE TABLE `payments` (
+CREATE TABLE `tb_payments` (
   `payment_id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `amount` decimal(10,0) NOT NULL,
@@ -38,10 +38,10 @@ CREATE TABLE `payments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `payments`
+-- Dumping data untuk tabel `tb_payments`
 --
 
-INSERT INTO `payments` (`payment_id`, `user_id`, `amount`, `payment_date`, `status`, `kode_transaksi`, `invoice_date`) VALUES
+INSERT INTO `tb_payments` (`payment_id`, `user_id`, `amount`, `payment_date`, `status`, `kode_transaksi`, `invoice_date`) VALUES
 (2, 94, '5000', '2024-05-07 14:35:09', 'lunas', 'TRX-20240507163509-6', '2024-05-07 09:35:09'),
 (4, 94, '5000', '2024-05-07 14:39:00', 'lunas', 'TRX-20240507163900-5', '2024-05-07 09:39:00'),
 (6, 94, '5000', '2024-05-07 14:39:07', 'belum dibayar', 'TRX-20240507163907-3', '2024-05-07 09:39:07'),
@@ -63,6 +63,30 @@ INSERT INTO `payments` (`payment_id`, `user_id`, `amount`, `payment_date`, `stat
 (22, 94, '5', '2024-05-07 14:42:40', 'belum dibayar', 'TRX-20240507164240-d', '2024-05-07 09:42:40'),
 (23, 1, '5', '2024-05-07 14:42:42', 'belum dibayar', 'TRX-20240507164242-7', '2024-05-07 09:42:42'),
 (24, 94, '5', '2024-05-07 14:42:42', 'belum dibayar', 'TRX-20240507164242-8', '2024-05-07 09:42:42');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `tb_users`
+--
+
+CREATE TABLE `tb_users` (
+  `user_id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('admin','user') NOT NULL DEFAULT 'user',
+  `total_lunas` decimal(10,2) DEFAULT 0.00,
+  `total_belum_bayar` decimal(10,2) DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `tb_users`
+--
+
+INSERT INTO `tb_users` (`user_id`, `username`, `password`, `role`, `total_lunas`, `total_belum_bayar`) VALUES
+(1, 'admin', '', 'admin', '0.00', '0.00'),
+(94, 'intan', '', 'user', '0.00', '0.00'),
+(97, 'hanum', '', 'admin', '0.00', '0.00');
 
 -- --------------------------------------------------------
 
@@ -118,40 +142,23 @@ INSERT INTO `tb_warga` (`id`, `nik`, `nama_lengkap`, `no_hp`, `alamat`, `created
 (39, '', 'permata', '', '', '2024-05-08 01:09:53'),
 (40, '', 'elya', '', '', '2024-05-08 01:11:26');
 
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `users`
---
-
-CREATE TABLE `users` (
-  `user_id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` enum('admin','user') NOT NULL DEFAULT 'user',
-  `total_lunas` decimal(10,2) DEFAULT 0.00,
-  `total_belum_bayar` decimal(10,2) DEFAULT 0.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `users`
---
-
-INSERT INTO `users` (`user_id`, `username`, `password`, `role`, `total_lunas`, `total_belum_bayar`) VALUES
-(1, 'admin', '', 'admin', '0.00', '0.00'),
-(94, 'intan', '', 'user', '0.00', '0.00'),
-(96, 'hanum', '', 'user', '0.00', '0.00');
-
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `payments`
+-- Indeks untuk tabel `tb_payments`
 --
-ALTER TABLE `payments`
+ALTER TABLE `tb_payments`
   ADD PRIMARY KEY (`payment_id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indeks untuk tabel `tb_users`
+--
+ALTER TABLE `tb_users`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- Indeks untuk tabel `tb_warga`
@@ -160,21 +167,20 @@ ALTER TABLE `tb_warga`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `username` (`username`);
-
---
 -- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT untuk tabel `payments`
+-- AUTO_INCREMENT untuk tabel `tb_payments`
 --
-ALTER TABLE `payments`
+ALTER TABLE `tb_payments`
   MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT untuk tabel `tb_users`
+--
+ALTER TABLE `tb_users`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_warga`
@@ -183,20 +189,14 @@ ALTER TABLE `tb_warga`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
---
-ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
-
---
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Ketidakleluasaan untuk tabel `payments`
+-- Ketidakleluasaan untuk tabel `tb_payments`
 --
-ALTER TABLE `payments`
-  ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+ALTER TABLE `tb_payments`
+  ADD CONSTRAINT `tb_payments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tb_users` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
