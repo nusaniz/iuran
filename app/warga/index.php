@@ -95,7 +95,7 @@
                 echo "<a class='btn btn-primary' href='?page=editwarga&&id=" .
                     $row["id"] .
                     "'>Edit</a> ";
-                echo "<a class='btn btn-danger' href='?hapus_id=" .
+                echo "<a class='btn btn-danger' href='?page=warga&&hapus_id=" .
                     $row["id"] .
                     "' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\")'>Hapus</a>";
                 echo "</td>";
@@ -150,7 +150,8 @@
                 $query_hapus = "DELETE FROM tb_warga WHERE id = $hapus_id";
                 if (mysqli_query($conn, $query_hapus)) {
                     echo "<script>alert('Data berhasil dihapus');</script>";
-                    echo "<script>window.location.href='index.php';</script>";
+                    // echo "<script>window.location.href='index.php';</script>";
+                    echo "<script>window.location.href='index.php?page=warga';</script>";
                 } else {
                     echo "<script>alert('Gagal menghapus data');</script>";
                     echo "<script>window.location.href='index.php';</script>";
