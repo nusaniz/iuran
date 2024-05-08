@@ -216,6 +216,45 @@ $result_tb_payments = mysqli_query($conn, $query_tb_payments);
 
     <!-- Tambahkan navigasi pagination -->
     <ul class="pagination justify-content-center">
+        <!-- Tombol Sebelumnya -->
+        <li class="page-item <?php echo $current_page <= 1 ? 'disabled' : ''; ?>">
+            <a class="page-link" href="?page=<?php echo $current_page - 1 . ($search ? '&search=' . $search : ''); ?>">Sebelumnya</a>
+        </li>
+        
+        <?php
+        // Tentukan halaman yang akan ditampilkan
+        $startPage = $current_page - 1;
+        $endPage = $current_page + 1;
+        
+        // Jika halaman saat ini adalah halaman pertama
+        if ($current_page <= 1) {
+            $startPage = 1;
+            $endPage = min(3, $total_pages); // Tampilkan maksimal 3 halaman
+        }
+        
+        // Jika halaman saat ini adalah halaman terakhir
+        if ($current_page >= $total_pages) {
+            $startPage = max(1, $total_pages - 2); // Tampilkan maksimal 3 halaman
+            $endPage = $total_pages;
+        }
+        
+        // Tampilkan tautan untuk halaman yang ditentukan
+        for ($i = $startPage; $i <= $endPage; $i++) :
+        ?>
+            <li class="page-item <?php echo $current_page == $i ? 'active' : ''; ?>">
+                <a class="page-link" href="?page=<?php echo $i . ($search ? '&search=' . $search : ''); ?>"><?php echo $i; ?></a>
+            </li>
+        <?php endfor; ?>
+        
+        <!-- Tombol Berikutnya -->
+        <li class="page-item <?php echo $current_page >= $total_pages ? 'disabled' : ''; ?>">
+            <a class="page-link" href="?page=<?php echo $current_page + 1 . ($search ? '&search=' . $search : ''); ?>">Berikutnya</a>
+        </li>
+    </ul>
+
+
+    <!-- Tambahkan navigasi pagination -->
+    <!-- <ul class="pagination justify-content-center">
         <li class="page-item <?php echo $current_page <= 1 ? 'disabled' : ''; ?>">
             <a class="page-link" href="?page=<?php echo $current_page - 1 . ($search ? '&search=' . $search : ''); ?>">Sebelumnya</a>
         </li>
@@ -227,7 +266,7 @@ $result_tb_payments = mysqli_query($conn, $query_tb_payments);
         <li class="page-item <?php echo $current_page >= $total_pages ? 'disabled' : ''; ?>">
             <a class="page-link" href="?page=<?php echo $current_page + 1 . ($search ? '&search=' . $search : ''); ?>">Berikutnya</a>
         </li>
-    </ul>
+    </ul> -->
 
     <!-- Menampilkan total lunas dan belum bayar tiap pengguna -->
     <h3 class="mt-4">Total Lunas dan Belum Bayar Tiap Pengguna</h3>

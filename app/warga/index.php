@@ -116,22 +116,106 @@
             $data_jumlah = mysqli_fetch_assoc($result_jumlah);
             $total_halaman = ceil($data_jumlah["jumlah"] / $limit);
 
+
+        //    Tombol navigasi halaman
+            echo "<tr>
+                <td colspan='11'>
+                    <ul class='pagination justify-content-center'>";
+                        // Tentukan halaman yang akan ditampilkan
+                        $startPage = $halaman - 1;
+                        $endPage = $halaman + 1;
+            
+                        // Jika halaman saat ini adalah halaman pertama
+                        if ($halaman <= 1) {
+                            $startPage = 1;
+                            $endPage = min(3, $total_halaman); // Tampilkan maksimal 3 halaman
+                        }
+            
+                        // Jika halaman saat ini adalah halaman terakhir
+                        if ($halaman >= $total_halaman) {
+                            $startPage = max(1, $total_halaman - 2); // Tampilkan maksimal 3 halaman
+                            $endPage = $total_halaman;
+                        }
+            
+                        // Tampilkan tautan "Sebelumnya" jika halaman bukan halaman pertama
+                        if ($halaman > 1) {
+                            $prevPage = $halaman - 1;
+                            echo "<li class='page-item'><a class='page-link' href='?page=warga&&halaman=$prevPage" . (isset($_GET["searchInput"]) ? "&searchInput=" . $_GET["searchInput"] : "") . "'>Sebelumnya</a></li>";
+                        }
+            
+                        // Tampilkan tautan untuk halaman yang ditentukan
+                        for ($i = $startPage; $i <= $endPage; $i++) {
+                            $class_active = $i == $halaman ? 'active' : '';
+                            if (isset($_GET["searchInput"]) && !empty($_GET["searchInput"])) {
+                                echo "<li class='page-item $class_active'><a class='page-link' href='?page=warga&&halaman=$i&searchInput=$searchInput'>$i</a></li>";
+                            } else {
+                                echo "<li class='page-item $class_active'><a class='page-link' href='?page=warga&&halaman=$i'>$i</a></li>";
+                            }
+                        }
+            
+                        // Tampilkan tautan "Selanjutnya" jika halaman bukan halaman terakhir
+                        if ($halaman < $total_halaman) {
+                            $nextPage = $halaman + 1;
+                            echo "<li class='page-item'><a class='page-link' href='?page=warga&&halaman=$nextPage" . (isset($_GET["searchInput"]) ? "&searchInput=" . $_GET["searchInput"] : "") . "'>Selanjutnya</a></li>";
+                        }
+                        echo"
+                    </ul>
+                </td>
+            </tr>";
+            
+
+
             // Tombol navigasi halaman
-            echo "<tr><td colspan='11'>";
-            echo "<ul class='pagination justify-content-center'>";
-            for ($i = 1; $i <= $total_halaman; $i++) {
-                $class_active = $i == $halaman ? "active" : "";
-                if (
-                    isset($_GET["searchInput"]) &&
-                    !empty($_GET["searchInput"])
-                ) {
-                    echo "<li class='page-item $class_active'><a class='page-link' href='?page=warga&&halaman=$i&searchInput=$searchInput'>$i</a></li>";
-                } else {
-                    echo "<li class='page-item $class_active'><a class='page-link' href='?page=warga&&halaman=$i'>$i</a></li>";
-                }
-            }
-            echo "</ul>";
-            echo "</td></tr>";
+            // echo "<tr>
+            //     <td colspan='11'>
+            //         <ul class='pagination justify-content-center'>";
+            //             // Tentukan halaman yang akan ditampilkan
+            //             $startPage = $halaman - 1;
+            //             $endPage = $halaman + 1;
+
+            //             // Jika halaman saat ini adalah halaman pertama
+            //             if ($halaman <= 1) {
+            //                 $startPage = 1;
+            //                 $endPage = min(3, $total_halaman); // Tampilkan maksimal 3 halaman
+            //             }
+
+            //             // Jika halaman saat ini adalah halaman terakhir
+            //             if ($halaman >= $total_halaman) {
+            //                 $startPage = max(1, $total_halaman - 2); // Tampilkan maksimal 3 halaman
+            //                 $endPage = $total_halaman;
+            //             }
+
+            //             // Tampilkan tautan untuk halaman yang ditentukan
+            //             for ($i = $startPage; $i <= $endPage; $i++) {
+            //                 $class_active = $i == $halaman ? 'active' : '';
+            //                 if (isset($_GET["searchInput"]) && !empty($_GET["searchInput"])) {
+            //                     echo "<li class='page-item $class_active'><a class='page-link' href='?page=warga&&halaman=$i&searchInput=$searchInput'>$i</a></li>";
+            //                 } else {
+            //                     echo "<li class='page-item $class_active'><a class='page-link' href='?page=warga&&halaman=$i'>$i</a></li>";
+            //                 }
+            //             }
+            //         echo "</ul>
+            //     </td>
+            // </tr>";
+
+
+
+            // Tombol navigasi halaman
+            // echo "<tr><td colspan='11'>";
+            // echo "<ul class='pagination justify-content-center'>";
+            // for ($i = 1; $i <= $total_halaman; $i++) {
+            //     $class_active = $i == $halaman ? "active" : "";
+            //     if (
+            //         isset($_GET["searchInput"]) &&
+            //         !empty($_GET["searchInput"])
+            //     ) {
+            //         echo "<li class='page-item $class_active'><a class='page-link' href='?page=warga&&halaman=$i&searchInput=$searchInput'>$i</a></li>";
+            //     } else {
+            //         echo "<li class='page-item $class_active'><a class='page-link' href='?page=warga&&halaman=$i'>$i</a></li>";
+            //     }
+            // }
+            // echo "</ul>";
+            // echo "</td></tr>";
 
             // Menampilkan total data yang sesuai dengan hasil pencarian
             if (isset($_GET["searchInput"]) && !empty($_GET["searchInput"])) {
