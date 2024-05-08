@@ -25,12 +25,15 @@ $id = $_GET["id"];
 
 // Proses update data warga
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
     $nik = $_POST["nik"];
     $nama_lengkap = $_POST["nama_lengkap"];
     $no_hp = $_POST["no_hp"];
     $alamat = $_POST["alamat"];
+    $role = $_POST["role"];
 
-    $query_update = "UPDATE tb_warga SET nik='$nik', nama_lengkap='$nama_lengkap', no_hp='$no_hp', alamat='$alamat' WHERE id = $id";
+    $query_update = "UPDATE tb_users SET username='$username', password='$password', nik='$nik', nama_lengkap='$nama_lengkap', no_hp='$no_hp', alamat='$alamat', role='$role' WHERE user_id = $id";
 
     if (mysqli_query($conn, $query_update)) {
         // header("Location: index.php");
@@ -45,15 +48,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // http://localhost/iuran/app/index.php?page=warga
 
 // Query untuk mengambil data warga berdasarkan ID
-$query = "SELECT * FROM tb_warga WHERE id = $id";
+$query = "SELECT * FROM tb_users WHERE user_id = $id";
 $result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) == 1) {
     $row = mysqli_fetch_assoc($result);
+    $username = $row["username"];
+    $password = $row["password"];
     $nik = $row["nik"];
     $nama_lengkap = $row["nama_lengkap"];
     $no_hp = $row["no_hp"];
     $alamat = $row["alamat"];
+    $role = $row["role"];
 } else {
     echo "Data warga tidak ditemukan.";
     exit();
@@ -76,6 +82,18 @@ if (mysqli_num_rows($result) == 1) {
         $_SERVER["PHP_SELF"]
     ) . "?id=$id"; ?>"> -->
     <form method="post" action="">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars(
+                $username
+            ); ?>">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="text" class="form-control" id="password" name="password" value="<?php echo htmlspecialchars(
+                $password
+            ); ?>">
+        </div>
         <div class="form-group">
             <label for="nik">NIK:</label>
             <input type="text" class="form-control" id="nik" name="nik" value="<?php echo htmlspecialchars(
@@ -100,6 +118,13 @@ if (mysqli_num_rows($result) == 1) {
                 $alamat
             ); ?></textarea>
         </div>
+        <div class="form-group">
+              <label for="role">Role:</label>
+              <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
+                  <option value="admin">Admin</option>
+                  <option value="user">User</option>
+              </select>
+          </div>
         <button type="submit" class="btn btn-primary">Update Data</button>
     </form>
 </div>

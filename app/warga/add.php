@@ -28,6 +28,14 @@
     ); ?>"> -->
     <form method="post" action="">
         <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="text" class="form-control" id="password" name="password">
+        </div>
+        <div class="form-group">
             <label for="nik">NIK:</label>
             <input type="text" class="form-control" id="nik" name="nik">
         </div>
@@ -43,6 +51,13 @@
             <label for="alamat">Alamat:</label>
             <textarea class="form-control" id="alamat" name="alamat"></textarea>
         </div>
+        <div class="form-group">
+              <label for="role">Role:</label>
+              <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
+                  <option value="admin">Admin</option>
+                  <option value="user">User</option>
+              </select>
+          </div>
         <button type="submit" class="btn btn-primary">Tambah Data</button>
     </form>
 </div>
@@ -66,13 +81,16 @@ if (mysqli_connect_errno()) {
 
 // Proses input data warga
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
     $nik = $_POST["nik"];
     $nama_lengkap = $_POST["nama_lengkap"];
     $no_hp = $_POST["no_hp"];
     $alamat = $_POST["alamat"];
+    $role = $_POST["role"];
 
     // Query untuk memasukkan data ke tabel warga
-    $query = "INSERT INTO tb_warga (nik, nama_lengkap, no_hp, alamat) VALUES ('$nik', '$nama_lengkap', '$no_hp', '$alamat')";
+    $query = "INSERT INTO tb_users (username, password, nik, nama_lengkap, no_hp, alamat, role) VALUES ('$username','$password','$nik', '$nama_lengkap', '$no_hp', '$alamat', '$role')";
 
     if (mysqli_query($conn, $query)) {
         echo '<script>alert("Data warga berhasil ditambahkan.");</script>';

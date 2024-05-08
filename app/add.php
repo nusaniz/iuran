@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container">
   <div class="row">
     <div class="col">
-      <h2>Tambah Data Baru</h2>
+      <h2>Tambah Data User Baru</h2>
       <form method="POST" enctype="multipart/form-data">
           <div class="form-group">
               <label for="username">Nama:</label>
