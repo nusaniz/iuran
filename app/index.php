@@ -21,6 +21,7 @@ $sidebar_menu = array(
     'user' => 'User',
     // 'add' => 'Add User',
     'warga' => 'Warga',
+    'report' => 'Report',
     // 'editwarga' => 'editwarga',
     'logout' => 'Logout'
 );
@@ -36,6 +37,7 @@ $pages = array(
     'warga' => 'warga/index.php',
     'addwarga' => 'warga/add.php',
     'editwarga' => 'warga/edit.php',
+    'report' => 'report.php',
     'logout' => 'logout.php'
 );
 
