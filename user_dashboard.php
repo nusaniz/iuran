@@ -139,6 +139,42 @@ $total_nominal_lunas = $row_lunas['total_nominal_lunas'];
                         <?php 
                         // Hitung jumlah halaman
                         $total_pages = ceil($total_rows / $records_per_page);
+                        
+                        // Tentukan halaman "Sebelumnya" dan "Selanjutnya"
+                        $prev_page = max(1, $page - 1);
+                        $next_page = min($total_pages, $page + 1);
+
+                        // Tampilkan tombol "Sebelumnya"
+                        echo "<li class='page-item'><a class='page-link' href='?page=$prev_page&search=$search_query'>Sebelumnya</a></li>";
+
+                        // Tentukan rentang pagination yang akan ditampilkan
+                        $start_range = max(1, $page - 1);
+                        $end_range = min($total_pages, $page + 1);
+
+                        // Tampilkan pagination
+                        for ($i = $start_range; $i <= $end_range; $i++) {
+                            // Tambahkan kelas 'active' pada halaman aktif
+                            $active_class = ($i == $page) ? 'active' : '';
+                            echo "<li class='page-item $active_class'><a class='page-link' href='?page=$i&search=$search_query'>$i</a></li>";
+                        }
+
+                        // Tampilkan tombol "Selanjutnya"
+                        echo "<li class='page-item'><a class='page-link' href='?page=$next_page&search=$search_query'>Selanjutnya</a></li>";
+                        ?>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+
+        <!-- Pagination -->
+        <!-- <div class="row">
+            <div class="col">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <?php 
+                        // Hitung jumlah halaman
+                        $total_pages = ceil($total_rows / $records_per_page);
                         for ($i = 1; $i <= $total_pages; $i++) {
                             // Tambahkan kelas 'active' pada halaman aktif
                             $active_class = ($i == $page) ? 'active' : '';
@@ -148,7 +184,7 @@ $total_nominal_lunas = $row_lunas['total_nominal_lunas'];
                     </ul>
                 </nav>
             </div>
-        </div>
+        </div> -->
 
         <div class="row mt-3">
             <div class="col">
