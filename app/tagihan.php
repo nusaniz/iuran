@@ -58,7 +58,8 @@ $offset = ($current_page - 1) * $records_per_page;
 $query_tb_users = "SELECT tb_users.*, 
     SUM(CASE WHEN tb_payments.status = 'lunas' THEN tb_payments.amount ELSE 0 END) AS total_lunas, 
     SUM(CASE WHEN tb_payments.status = 'belum dibayar' THEN tb_payments.amount ELSE 0 END) AS total_belum_bayar,
-    COUNT(CASE WHEN tb_payments.status = 'belum dibayar' THEN tb_payments.payment_id ELSE NULL END) AS jumlah_belum_bayar 
+    COUNT(CASE WHEN tb_payments.status = 'belum dibayar' THEN tb_payments.payment_id ELSE NULL END) AS jumlah_belum_bayar, 
+    COUNT(CASE WHEN tb_payments.status = 'lunas' THEN tb_payments.payment_id ELSE NULL END) AS jumlah_lunas 
     FROM tb_users 
     LEFT JOIN tb_payments ON tb_users.user_id = tb_payments.user_id "
     . $where_clause .
@@ -106,6 +107,7 @@ $result_tb_users = mysqli_query($conn, $query_tb_users);
                 <th>Nama Pengguna</th>
                 <th>Total Lunas</th>
                 <th>Total Belum Bayar</th>
+                <th>Jumlah Lunas</th>
                 <th>Jumlah Belum Bayar</th>
             </tr>
         </thead>
@@ -118,6 +120,7 @@ $result_tb_users = mysqli_query($conn, $query_tb_users);
                 echo "<td>" . $row_tb_users['username'] . "</td>";
                 echo "<td>" . $row_tb_users['total_lunas'] . "</td>";
                 echo "<td>" . $row_tb_users['total_belum_bayar'] . "</td>";
+                echo "<td>" . $row_tb_users['jumlah_lunas'] . "</td>";
                 echo "<td>" . $row_tb_users['jumlah_belum_bayar'] . "</td>";
                 echo "</tr>";
             }
