@@ -20,6 +20,8 @@ $sidebar_menu = array(
     'tagihan' => 'Tagihan',
     'user' => 'User',
     'add' => 'Add',
+    'warga' => 'Warga',
+    // 'editwarga' => 'editwarga',
     'logout' => 'Logout'
 );
 
@@ -31,6 +33,8 @@ $pages = array(
     'edit' => 'edit_payment.php',
     'edituser' => 'edit_booking.php',
     'add' => 'add.php',
+    'warga' => 'warga/index.php',
+    'editwarga' => 'warga/edit.php',
     'logout' => 'logout.php'
 );
 
