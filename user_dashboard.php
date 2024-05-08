@@ -33,7 +33,7 @@ $start_from = ($page - 1) * $records_per_page;
 $search_query = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Query untuk mengambil data riwayat iuran pengguna berdasarkan user_id dan diurutkan berdasarkan tanggal pembayaran terbaru
-$query = "SELECT * FROM payments WHERE user_id='$user_id'";
+$query = "SELECT * FROM tb_payments WHERE user_id='$user_id'";
 // Tambahkan kondisi pencarian jika query pencarian tidak kosong
 if (!empty($search_query)) {
     // $query .= " AND kode_transaksi LIKE '%$search_query%'";
@@ -44,7 +44,7 @@ $query .= " ORDER BY payment_date DESC LIMIT $start_from, $records_per_page";
 $result = mysqli_query($koneksi, $query);
 
 // Query untuk menghitung jumlah total record
-$total_rows_query = "SELECT COUNT(*) AS total_rows FROM payments WHERE user_id='$user_id'";
+$total_rows_query = "SELECT COUNT(*) AS total_rows FROM tb_payments WHERE user_id='$user_id'";
 // Tambahkan kondisi pencarian jika query pencarian tidak kosong
 if (!empty($search_query)) {
     $total_rows_query .= " AND kode_transaksi LIKE '%$search_query%'";
@@ -54,14 +54,14 @@ $total_rows_data = mysqli_fetch_assoc($total_rows_result);
 $total_rows = $total_rows_data['total_rows'];
 
 // Query untuk menghitung jumlah tagihan belum dibayar pengguna
-$query_belum_dibayar = "SELECT COUNT(*) AS jumlah_belum_dibayar, SUM(amount) AS total_nominal_belum_dibayar FROM payments WHERE user_id='$user_id' AND status='belum dibayar'";
+$query_belum_dibayar = "SELECT COUNT(*) AS jumlah_belum_dibayar, SUM(amount) AS total_nominal_belum_dibayar FROM tb_payments WHERE user_id='$user_id' AND status='belum dibayar'";
 $result_belum_dibayar = mysqli_query($koneksi, $query_belum_dibayar);
 $row_belum_dibayar = mysqli_fetch_assoc($result_belum_dibayar);
 $total_belum_dibayar = $row_belum_dibayar['jumlah_belum_dibayar'];
 $total_nominal_belum_dibayar = $row_belum_dibayar['total_nominal_belum_dibayar'];
 
 // Query untuk menghitung jumlah tagihan yang telah lunas
-$query_lunas = "SELECT COUNT(*) AS jumlah_lunas, SUM(amount) AS total_nominal_lunas FROM payments WHERE user_id='$user_id' AND status='lunas'";
+$query_lunas = "SELECT COUNT(*) AS jumlah_lunas, SUM(amount) AS total_nominal_lunas FROM tb_payments WHERE user_id='$user_id' AND status='lunas'";
 $result_lunas = mysqli_query($koneksi, $query_lunas);
 $row_lunas = mysqli_fetch_assoc($result_lunas);
 $total_lunas = $row_lunas['jumlah_lunas'];

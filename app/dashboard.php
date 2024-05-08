@@ -36,7 +36,7 @@ function generateTransactionCode($koneksi) {
     $transactionCode = "TRX-" . $currentDateTime . "-" . $randomChars;
 
     // Periksa keberadaan kode transaksi dalam database
-    $query_check_duplicate = "SELECT COUNT(*) AS total FROM payments WHERE kode_transaksi='$transactionCode'";
+    $query_check_duplicate = "SELECT COUNT(*) AS total FROM tb_payments WHERE kode_transaksi='$transactionCode'";
     $result_check_duplicate = mysqli_query($koneksi, $query_check_duplicate);
     $row_check_duplicate = mysqli_fetch_assoc($result_check_duplicate);
     $total_duplicates = $row_check_duplicate['total'];
@@ -50,20 +50,20 @@ function generateTransactionCode($koneksi) {
 }
 
 // Query untuk mengambil daftar pengguna
-$query_users = "SELECT users.*, 
-    SUM(CASE WHEN payments.status = 'lunas' THEN payments.amount ELSE 0 END) AS total_lunas, 
-    SUM(CASE WHEN payments.status = 'belum dibayar' THEN payments.amount ELSE 0 END) AS total_belum_bayar,
-    COUNT(CASE WHEN payments.status = 'belum dibayar' THEN payments.payment_id ELSE NULL END) AS jumlah_belum_bayar 
-    FROM users 
-    LEFT JOIN payments ON users.user_id = payments.user_id 
-    GROUP BY users.user_id";
-$result_users = mysqli_query($koneksi, $query_users);
+$query_tb_users = "SELECT tb_users.*, 
+    SUM(CASE WHEN tb_payments.status = 'lunas' THEN tb_payments.amount ELSE 0 END) AS total_lunas, 
+    SUM(CASE WHEN tb_payments.status = 'belum dibayar' THEN tb_payments.amount ELSE 0 END) AS total_belum_bayar,
+    COUNT(CASE WHEN tb_payments.status = 'belum dibayar' THEN tb_payments.payment_id ELSE NULL END) AS jumlah_belum_bayar 
+    FROM tb_users 
+    LEFT JOIN tb_payments ON tb_users.user_id = tb_payments.user_id 
+    GROUP BY tb_users.user_id";
+$result_tb_users = mysqli_query($koneksi, $query_tb_users);
 
 // Search feature
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$query_payments = "SELECT users.username, payments.amount, payments.invoice_date, payments.kode_transaksi, payments.status, payments.payment_date, payments.payment_id FROM payments LEFT JOIN users ON payments.user_id = users.user_id WHERE users.username LIKE '%$search%' OR payments.kode_transaksi LIKE '%$search%'";
-$result_payments = mysqli_query($koneksi, $query_payments);
-$total_records = mysqli_num_rows($result_payments);
+$query_tb_payments = "SELECT tb_users.username, tb_payments.amount, tb_payments.invoice_date, tb_payments.kode_transaksi, tb_payments.status, tb_payments.payment_date, tb_payments.payment_id FROM tb_payments LEFT JOIN tb_users ON tb_payments.user_id = tb_users.user_id WHERE tb_users.username LIKE '%$search%' OR tb_payments.kode_transaksi LIKE '%$search%'";
+$result_tb_payments = mysqli_query($koneksi, $query_tb_payments);
+$total_records = mysqli_num_rows($result_tb_payments);
 
 // Batasi jumlah data per halaman
 $records_per_page = 5;
@@ -88,8 +88,8 @@ if ($current_page < 1) {
 $offset = ($current_page - 1) * $records_per_page;
 
 // Perbarui query untuk menambahkan LIMIT dan OFFSET
-$query_payments .= " LIMIT $offset, $records_per_page";
-$result_payments = mysqli_query($koneksi, $query_payments);
+$query_tb_payments .= " LIMIT $offset, $records_per_page";
+$result_tb_payments = mysqli_query($koneksi, $query_tb_payments);
 ?>
 
 <!DOCTYPE html>
@@ -134,8 +134,8 @@ $result_payments = mysqli_query($koneksi, $query_payments);
             <select id="user_id" name="user_id" class="form-control" required>
                 <?php 
                 // Tampilkan daftar pengguna sebagai pilihan dropdown
-                while ($row_users = mysqli_fetch_assoc($result_users)) {
-                    echo "<option value='" . $row_users['user_id'] . "'>" . $row_users['username'] . "</option>";
+                while ($row_tb_users = mysqli_fetch_assoc($result_tb_users)) {
+                    echo "<option value='" . $row_tb_users['user_id'] . "'>" . $row_tb_users['username'] . "</option>";
                 }
                 ?>
             </select>
@@ -186,23 +186,23 @@ $result_payments = mysqli_query($koneksi, $query_payments);
         <tbody>
             <?php
             $no = ($current_page - 1) * $records_per_page + 1;
-            while ($row_payments = mysqli_fetch_assoc($result_payments)) {
+            while ($row_tb_payments = mysqli_fetch_assoc($result_tb_payments)) {
                 echo "<tr>";
                 echo "<td>" . $no++ . "</td>";
-                echo "<td>" . $row_payments['kode_transaksi'] . "</td>";
-                echo "<td>" . $row_payments['username'] . "</td>";
-                echo "<td>" . $row_payments['amount'] . "</td>";
-                echo "<td class='" . ($row_payments['status'] === 'lunas' ? 'lunas' : '') . "'>" . $row_payments['status'] . "</td>";
-                echo "<td>" . $row_payments['invoice_date'] . "</td>";
-                echo "<td>" . $row_payments['payment_date'] . "</td>";
+                echo "<td>" . $row_tb_payments['kode_transaksi'] . "</td>";
+                echo "<td>" . $row_tb_payments['username'] . "</td>";
+                echo "<td>" . $row_tb_payments['amount'] . "</td>";
+                echo "<td class='" . ($row_tb_payments['status'] === 'lunas' ? 'lunas' : '') . "'>" . $row_tb_payments['status'] . "</td>";
+                echo "<td>" . $row_tb_payments['invoice_date'] . "</td>";
+                echo "<td>" . $row_tb_payments['payment_date'] . "</td>";
                 echo "<td>";
                 // echo "<form action='edit_payment.php' method='post'>";
                 echo "<form action='index.php?page=edit' method='post'>";
-                echo "<input type='hidden' name='payment_id' value='" . $row_payments['payment_id'] . "'>";
+                echo "<input type='hidden' name='payment_id' value='" . $row_tb_payments['payment_id'] . "'>";
                 echo "<button type='submit' name='edit_payment' class='btn btn-primary'>Edit</button>";
                 echo "</form>";
                 echo "<form action='delete_payment.php' method='post' class='mt-1'>";
-                echo "<input type='hidden' name='payment_id' value='" . $row_payments['payment_id'] . "'>";
+                echo "<input type='hidden' name='payment_id' value='" . $row_tb_payments['payment_id'] . "'>";
                 echo "<button type='submit' name='delete_payment' class='btn btn-danger'>Hapus</button>";
                 echo "</form>";
                 echo "</td>";
@@ -242,14 +242,14 @@ $result_payments = mysqli_query($koneksi, $query_payments);
         <tbody>
             <?php
             $no = 1;
-            mysqli_data_seek($result_users, 0); // Reset pointer result set
-            while ($row_users = mysqli_fetch_assoc($result_users)) {
+            mysqli_data_seek($result_tb_users, 0); // Reset pointer result set
+            while ($row_tb_users = mysqli_fetch_assoc($result_tb_users)) {
                 echo "<tr>";
                 echo "<td>" . $no++ . "</td>";
-                echo "<td>" . $row_users['username'] . "</td>";
-                echo "<td>" . $row_users['total_lunas'] . "</td>";
-                echo "<td>" . $row_users['total_belum_bayar'] . "</td>";
-                echo "<td>" . $row_users['jumlah_belum_bayar'] . "</td>";
+                echo "<td>" . $row_tb_users['username'] . "</td>";
+                echo "<td>" . $row_tb_users['total_lunas'] . "</td>";
+                echo "<td>" . $row_tb_users['total_belum_bayar'] . "</td>";
+                echo "<td>" . $row_tb_users['jumlah_belum_bayar'] . "</td>";
                 echo "</tr>";
             }
             ?>

@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     }
 
     // Query untuk memperbarui data pembayaran
-    $query_update_payment = "UPDATE payments SET amount='$amount', status='$status' WHERE payment_id='$payment_id'";
+    $query_update_payment = "UPDATE tb_payments SET amount='$amount', status='$status' WHERE payment_id='$payment_id'";
     if (mysqli_query($koneksi, $query_update_payment)) {
         echo "Data pembayaran berhasil diperbarui.";
     } else {

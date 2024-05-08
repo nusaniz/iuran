@@ -28,7 +28,7 @@ if (isset($_POST['delete_payment'])) {
     $payment_id = $_POST['payment_id'];
 
     // Query untuk menghapus data pembayaran berdasarkan payment_id
-    $query_delete_payment = "DELETE FROM payments WHERE payment_id = $payment_id";
+    $query_delete_payment = "DELETE FROM tb_payments WHERE payment_id = $payment_id";
 
     if (mysqli_query($koneksi, $query_delete_payment)) {
         echo "Data pembayaran berhasil dihapus.";

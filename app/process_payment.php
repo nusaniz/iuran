@@ -31,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Query untuk menambahkan data tagihan ke dalam tabel payments
-    $query = "INSERT INTO payments (user_id, amount, kode_transaksi, invoice_date) VALUES ('$user_id', '$amount', '$kode_transaksi', '$invoice_date')"; // Menambahkan kolom kode_transaksi dan invoice_date ke dalam query
+    // Query untuk menambahkan data tagihan ke dalam tabel tb_payments
+    $query = "INSERT INTO tb_payments (user_id, amount, kode_transaksi, invoice_date) VALUES ('$user_id', '$amount', '$kode_transaksi', '$invoice_date')"; // Menambahkan kolom kode_transaksi dan invoice_date ke dalam query
     if (mysqli_query($koneksi, $query)) {
         echo "Data tagihan berhasil ditambahkan.";
         header("Location: index.php?page=home");
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $payment_id = mysqli_insert_id($koneksi); // Mendapatkan ID pembayaran terbaru
 
             // Query untuk memperbarui invoice_date
-            $update_query = "UPDATE payments SET invoice_date = '$invoice_date' WHERE payment_id = $payment_id";
+            $update_query = "UPDATE tb_payments SET invoice_date = '$invoice_date' WHERE payment_id = $payment_id";
             mysqli_query($koneksi, $update_query);
         }
     } else {

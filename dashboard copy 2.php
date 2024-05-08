@@ -27,8 +27,8 @@ if (mysqli_connect_errno()) {
 }
 
 // Query untuk mengambil daftar pengguna
-$query_users = "SELECT * FROM users";
-$result_users = mysqli_query($koneksi, $query_users);
+$query_tb_users = "SELECT * FROM tb_users";
+$result_tb_users = mysqli_query($koneksi, $query_tb_users);
 ?>
 
 <!DOCTYPE html>
@@ -49,8 +49,8 @@ $result_users = mysqli_query($koneksi, $query_users);
     <select id="user_id" name="user_id" required>
         <?php 
         // Tampilkan daftar pengguna sebagai pilihan dropdown
-        while ($row_users = mysqli_fetch_assoc($result_users)) {
-            echo "<option value='" . $row_users['user_id'] . "'>" . $row_users['username'] . "</option>";
+        while ($row_tb_users = mysqli_fetch_assoc($result_tb_users)) {
+            echo "<option value='" . $row_tb_users['user_id'] . "'>" . $row_tb_users['username'] . "</option>";
         }
         ?>
     </select><br>
@@ -72,26 +72,26 @@ $result_users = mysqli_query($koneksi, $query_users);
     </tr>
     <?php
     // Query untuk mengambil data tagihan setiap warga
-    $query_payments = "SELECT users.username, payments.amount, payments.status, payments.payment_date, payments.payment_id FROM users LEFT JOIN payments ON users.user_id = payments.user_id";
-    $result_payments = mysqli_query($koneksi, $query_payments);
+    $query_tb_payments = "SELECT tb_users.username, tb_payments.amount, tb_payments.status, tb_payments.payment_date, tb_payments.payment_id FROM tb_users LEFT JOIN tb_payments ON tb_users.user_id = tb_payments.user_id";
+    $result_tb_payments = mysqli_query($koneksi, $query_tb_payments);
     $no = 1;
-    while ($row_payments = mysqli_fetch_assoc($result_payments)) {
+    while ($row_tb_payments = mysqli_fetch_assoc($result_tb_payments)) {
         echo "<tr>";
         echo "<td>" . $no++ . "</td>";
-        echo "<td>" . $row_payments['username'] . "</td>";
-        echo "<td>" . $row_payments['amount'] . "</td>";
-        echo "<td>" . $row_payments['status'] . "</td>";
-        echo "<td>" . $row_payments['payment_date'] . "</td>";
+        echo "<td>" . $row_tb_payments['username'] . "</td>";
+        echo "<td>" . $row_tb_payments['amount'] . "</td>";
+        echo "<td>" . $row_tb_payments['status'] . "</td>";
+        echo "<td>" . $row_tb_payments['payment_date'] . "</td>";
         echo "<td>";
         // Tambahkan kondisi untuk menampilkan tombol aksi sesuai status pembayaran
-        if ($row_payments['status'] == 'belum dibayar') {
+        if ($row_tb_payments['status'] == 'belum dibayar') {
             echo "<form action='update_payment_status.php' method='post'>";
-            echo "<input type='hidden' name='payment_id' value='" . $row_payments['payment_id'] . "'>";
+            echo "<input type='hidden' name='payment_id' value='" . $row_tb_payments['payment_id'] . "'>";
             echo "<input type='submit' name='update_status' value='Ubah Status Lunas'>";
             echo "</form>";
-        } elseif ($row_payments['status'] == 'lunas') {
+        } elseif ($row_tb_payments['status'] == 'lunas') {
             echo "<form action='update_payment_status.php' method='post'>";
-            echo "<input type='hidden' name='payment_id' value='" . $row_payments['payment_id'] . "'>";
+            echo "<input type='hidden' name='payment_id' value='" . $row_tb_payments['payment_id'] . "'>";
             echo "<input type='submit' name='update_status' value='Ubah Status Belum Dibayar'>";
             echo "</form>";
         } else {

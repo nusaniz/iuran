@@ -38,7 +38,7 @@ if(isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
 }
 
 // Query untuk mengambil jumlah total data sesuai dengan kriteria pencarian
-$query_count = "SELECT COUNT(*) AS total_records FROM users" . $where_clause;
+$query_count = "SELECT COUNT(*) AS total_records FROM tb_users" . $where_clause;
 $result_count = mysqli_query($koneksi, $query_count);
 $row_count = mysqli_fetch_assoc($result_count);
 $total_records = $row_count['total_records'];
@@ -53,17 +53,17 @@ $current_page = min($current_page, $total_pages);
 $offset = ($current_page - 1) * $records_per_page;
 
 // Query untuk mengambil daftar pengguna dengan total lunas, total belum bayar, dan jumlah belum bayar sesuai dengan kriteria pencarian
-$query_users = "SELECT users.*, 
-    SUM(CASE WHEN payments.status = 'lunas' THEN payments.amount ELSE 0 END) AS total_lunas, 
-    SUM(CASE WHEN payments.status = 'belum dibayar' THEN payments.amount ELSE 0 END) AS total_belum_bayar,
-    COUNT(CASE WHEN payments.status = 'belum dibayar' THEN payments.payment_id ELSE NULL END) AS jumlah_belum_bayar 
-    FROM users 
-    LEFT JOIN payments ON users.user_id = payments.user_id "
+$query_tb_users = "SELECT tb_users.*, 
+    SUM(CASE WHEN tb_payments.status = 'lunas' THEN tb_payments.amount ELSE 0 END) AS total_lunas, 
+    SUM(CASE WHEN tb_payments.status = 'belum dibayar' THEN tb_payments.amount ELSE 0 END) AS total_belum_bayar,
+    COUNT(CASE WHEN tb_payments.status = 'belum dibayar' THEN tb_payments.payment_id ELSE NULL END) AS jumlah_belum_bayar 
+    FROM tb_users 
+    LEFT JOIN tb_payments ON tb_users.user_id = tb_payments.user_id "
     . $where_clause .
-    "GROUP BY users.user_id
+    "GROUP BY tb_users.user_id
     LIMIT $offset, $records_per_page";
 
-$result_users = mysqli_query($koneksi, $query_users);
+$result_tb_users = mysqli_query($koneksi, $query_tb_users);
 ?>
 
 <!DOCTYPE html>
@@ -110,13 +110,13 @@ $result_users = mysqli_query($koneksi, $query_users);
         <tbody>
             <?php
             $no = ($current_page - 1) * $records_per_page + 1;
-            while ($row_users = mysqli_fetch_assoc($result_users)) {
+            while ($row_tb_users = mysqli_fetch_assoc($result_tb_users)) {
                 echo "<tr>";
                 echo "<td>" . $no++ . "</td>";
-                echo "<td>" . $row_users['username'] . "</td>";
-                echo "<td>" . $row_users['total_lunas'] . "</td>";
-                echo "<td>" . $row_users['total_belum_bayar'] . "</td>";
-                echo "<td>" . $row_users['jumlah_belum_bayar'] . "</td>";
+                echo "<td>" . $row_tb_users['username'] . "</td>";
+                echo "<td>" . $row_tb_users['total_lunas'] . "</td>";
+                echo "<td>" . $row_tb_users['total_belum_bayar'] . "</td>";
+                echo "<td>" . $row_tb_users['jumlah_belum_bayar'] . "</td>";
                 echo "</tr>";
             }
             ?>

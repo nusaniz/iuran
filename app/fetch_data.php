@@ -20,7 +20,7 @@ if ($conn->connect_error) {
 $show = isset($_POST['show']) ? $_POST['show'] : 10;
 
 // Calculate pagination
-$total_query = "SELECT COUNT(*) AS total FROM users";
+$total_query = "SELECT COUNT(*) AS total FROM tb_users";
 $total_result = $conn->query($total_query);
 $total_rows = $total_result->fetch_assoc()['total'];
 $total_pages = ceil($total_rows / $show);
@@ -29,20 +29,20 @@ $hal = isset($_GET['hal']) && $_GET['hal'] <= $total_pages ? $_GET['hal'] : 1;
 $offset = ($hal - 1) * $show;
 
 // Menghitung total data
-$total_data_query = "SELECT COUNT(*) AS total FROM users";
+$total_data_query = "SELECT COUNT(*) AS total FROM tb_users";
 $result_total = $conn->query($total_data_query);
 $total_rows = $result_total->fetch_assoc()['total'];
 
 // Menghitung total data hasil pencarian
 if (isset($_POST['search'])) {
     $search = $_POST['search'];
-    $search_query = "SELECT COUNT(*) AS total FROM users WHERE username LIKE '%$search%'";
+    $search_query = "SELECT COUNT(*) AS total FROM tb_users WHERE username LIKE '%$search%'";
     $result_search = $conn->query($search_query);
     $total_search_rows = $result_search->fetch_assoc()['total'];
 }
 
 // Menghitung jumlah data pada setiap status
-$status_query = "SELECT role, COUNT(*) AS total FROM users GROUP BY role";
+$status_query = "SELECT role, COUNT(*) AS total FROM tb_users GROUP BY role";
 $result_status = $conn->query($status_query);
 $status_counts = array();
 while ($row_status = $result_status->fetch_assoc()) {
@@ -50,10 +50,10 @@ while ($row_status = $result_status->fetch_assoc()) {
 }
 
 // Query untuk mengambil data dari tabel dengan pagination
-$sql = "SELECT * FROM users LIMIT $offset, $show";
+$sql = "SELECT * FROM tb_users LIMIT $offset, $show";
 if (isset($_POST['search'])) {
     $search = $_POST['search'];
-    $sql = "SELECT * FROM users WHERE username LIKE '%$search%' OR role LIKE '%$search%' LIMIT $offset, $show";
+    $sql = "SELECT * FROM tb_users WHERE username LIKE '%$search%' OR role LIKE '%$search%' LIMIT $offset, $show";
 }
 $result = $conn->query($sql);
 

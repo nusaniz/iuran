@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $role = $_POST['role'];
 
     // Mengeksekusi query untuk memperbarui data berdasarkan ID
-    $sql = "UPDATE users SET username='$username', password='$password', role='$role' WHERE user_id=$id";
+    $sql = "UPDATE tb_users SET username='$username', password='$password', role='$role' WHERE user_id=$id";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['message'] = "Data berhasil diperbarui.";

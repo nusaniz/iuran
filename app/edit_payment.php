@@ -28,8 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_payment'])) {
     // Ambil payment_id dari formulir
     $payment_id = $_POST['payment_id'];
 
-    // Query untuk mengambil data pembayaran berdasarkan payment_id dan menggabungkan dengan data dari tabel users
-    $query_payment_detail = "SELECT payments.*, users.username FROM payments JOIN users ON payments.user_id = users.user_id WHERE payment_id='$payment_id'";
+    // Query untuk mengambil data pembayaran berdasarkan payment_id dan menggabungkan dengan data dari tabel tb_users
+    $query_payment_detail = "SELECT tb_payments.*, tb_users.username FROM tb_payments JOIN tb_users ON tb_payments.user_id = tb_users.user_id WHERE payment_id='$payment_id'";
     $result_payment_detail = mysqli_query($koneksi, $query_payment_detail);
     $row_payment_detail = mysqli_fetch_assoc($result_payment_detail);
 }

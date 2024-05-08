@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // move_uploaded_file($_FILES["role"]["tmp_username"], $target_file);
 
     // Insert data baru ke dalam tabel
-    $sql = "INSERT INTO users ( username, password, role) VALUES ( '$username', '$password', '$role')";
+    $sql = "INSERT INTO tb_users ( username, password, role) VALUES ( '$username', '$password', '$role')";
     if (mysqli_query($conn, $sql)) {
         echo "Data baru berhasil ditambahkan.";
     } else {

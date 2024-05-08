@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     }
 
     // Query untuk mengambil status pembayaran saat ini
-    $query_get_status = "SELECT status FROM payments WHERE payment_id='$payment_id'";
+    $query_get_status = "SELECT status FROM tb_payments WHERE payment_id='$payment_id'";
     $result_get_status = mysqli_query($koneksi, $query_get_status);
     $row_get_status = mysqli_fetch_assoc($result_get_status);
     $current_status = $row_get_status['status'];
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
         exit();
     }
 
-    $query_update_status = "UPDATE payments SET status='$new_status', payment_date=NOW() WHERE payment_id='$payment_id'";
+    $query_update_status = "UPDATE tb_payments SET status='$new_status', payment_date=NOW() WHERE payment_id='$payment_id'";
     if (mysqli_query($koneksi, $query_update_status)) {
         echo "Status pembayaran berhasil diubah menjadi " . $new_status . ".";
     } else {

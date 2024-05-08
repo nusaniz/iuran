@@ -12,7 +12,7 @@ if(isset($_GET['id'])) {
     $id = $_GET['id'];
 
     // Mengeksekusi query untuk mendapatkan data berdasarkan ID
-    $sql = "SELECT * FROM users WHERE user_id = $id";
+    $sql = "SELECT * FROM tb_users WHERE user_id = $id";
     $result = $conn->query($sql);
 
     // Memeriksa apakah data ditemukan

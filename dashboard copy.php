@@ -27,7 +27,7 @@ if (mysqli_connect_errno()) {
 }
 
 // Query untuk mengambil daftar pengguna
-$query = "SELECT * FROM users";
+$query = "SELECT * FROM tb_users";
 $result = mysqli_query($koneksi, $query);
 ?>
 

@@ -44,16 +44,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Query untuk mengambil daftar pengguna
-    $query_users = "SELECT * FROM users";
-    $result_users = mysqli_query($koneksi, $query_users);
+    $query_tb_users = "SELECT * FROM tb_users";
+    $result_tb_users = mysqli_query($koneksi, $query_tb_users);
 
     // Looping untuk membuat tagihan untuk setiap pengguna
-    while ($row_users = mysqli_fetch_assoc($result_users)) {
-        $user_id = $row_users['user_id'];
+    while ($row_tb_users = mysqli_fetch_assoc($result_tb_users)) {
+        $user_id = $row_tb_users['user_id'];
         $kode_transaksi = generateTransactionCode(); // Generate kode transaksi baru untuk setiap tagihan
         
-        // Query untuk menambahkan data tagihan ke dalam tabel payments
-        $query = "INSERT INTO payments (user_id, amount, kode_transaksi, invoice_date) VALUES ('$user_id', '$amount', '$kode_transaksi', '$invoice_date')"; // Menambahkan kolom kode_transaksi dan invoice_date ke dalam query
+        // Query untuk menambahkan data tagihan ke dalam tabel tb_payments
+        $query = "INSERT INTO tb_payments (user_id, amount, kode_transaksi, invoice_date) VALUES ('$user_id', '$amount', '$kode_transaksi', '$invoice_date')"; // Menambahkan kolom kode_transaksi dan invoice_date ke dalam query
         if (!mysqli_query($koneksi, $query)) {
             echo "Error: " . $query . "<br>" . mysqli_error($koneksi);
         }
