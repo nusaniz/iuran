@@ -1,4 +1,5 @@
 <?php
+include '../conf/db_connection.php';
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -17,29 +18,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $amount = $_POST['amount'];
     $status = $_POST['status'];
 
-    // Koneksi ke database (ganti sesuai dengan pengaturan Anda)
-    $host = "localhost";
-    $db_username = "root";
-    $db_password = "";
-    $database = "db_iuran";
-    $koneksi = mysqli_connect($host, $db_username, $db_password, $database);
+    // conn ke database (ganti sesuai dengan pengaturan Anda)
+    // $host = "localhost";
+    // $db_username = "root";
+    // $db_password = "";
+    // $database = "db_iuran";
+    // $conn = mysqli_connect($host, $db_username, $db_password, $database);
 
-    // Cek koneksi
+    // Cek conn
     if (mysqli_connect_errno()) {
-        echo "Koneksi database gagal: " . mysqli_connect_error();
+        echo "conn database gagal: " . mysqli_connect_error();
         exit();
     }
 
     // Query untuk memperbarui data pembayaran
     $query_update_payment = "UPDATE tb_payments SET amount='$amount', status='$status' WHERE payment_id='$payment_id'";
-    if (mysqli_query($koneksi, $query_update_payment)) {
+    if (mysqli_query($conn, $query_update_payment)) {
         echo "Data pembayaran berhasil diperbarui.";
     } else {
-        echo "Error: " . $query_update_payment . "<br>" . mysqli_error($koneksi);
+        echo "Error: " . $query_update_payment . "<br>" . mysqli_error($conn);
     }
 
-    // Tutup koneksi
-    mysqli_close($koneksi);
+    // Tutup conn
+    mysqli_close($conn);
 }
 
 header("Location: index.php?page=home");

@@ -1,4 +1,5 @@
 <?php
+include 'conf/db_connection.php';
 session_start();
 
 if (isset($_SESSION['user_id'])) {
@@ -11,22 +12,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Koneksi ke database (ganti sesuai dengan pengaturan Anda)
-    $host = "localhost";
-    $db_username = "root";
-    $db_password = "";
-    $database = "db_iuran";
-    $koneksi = mysqli_connect($host, $db_username, $db_password, $database);
+    // conn ke database (ganti sesuai dengan pengaturan Anda)
+    // $host = "localhost";
+    // $db_username = "root";
+    // $db_password = "";
+    // $database = "db_iuran";
+    // $conn = mysqli_connect($host, $db_username, $db_password, $database);
 
-    // Cek koneksi
+    // Cek conn
     if (mysqli_connect_errno()) {
-        echo "Koneksi database gagal: " . mysqli_connect_error();
+        echo "conn database gagal: " . mysqli_connect_error();
         exit();
     }
 
     // Query untuk mencari user berdasarkan username dan password
     $query = "SELECT * FROM tb_users WHERE username='$username' AND password='$password'";
-    $result = mysqli_query($koneksi, $query);
+    $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);

@@ -1,4 +1,6 @@
 <?php
+include '../conf/db_connection.php';
+
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -11,16 +13,16 @@ if ($_SESSION['role'] !== 'admin') {
     exit();
 }
 
-// Koneksi ke database
-$host = "localhost";
-$db_username = "root";
-$db_password = "";
-$database = "db_iuran";
-$koneksi = mysqli_connect($host, $db_username, $db_password, $database);
+// conn ke database
+// $host = "localhost";
+// $db_username = "root";
+// $db_password = "";
+// $database = "db_iuran";
+// $conn = mysqli_connect($host, $db_username, $db_password, $database);
 
-// Cek koneksi
+// Cek conn
 if (mysqli_connect_errno()) {
-    echo "Koneksi database gagal: " . mysqli_connect_error();
+    echo "conn database gagal: " . mysqli_connect_error();
     exit();
 }
 
@@ -30,16 +32,16 @@ if (isset($_POST['delete_payment'])) {
     // Query untuk menghapus data pembayaran berdasarkan payment_id
     $query_delete_payment = "DELETE FROM tb_payments WHERE payment_id = $payment_id";
 
-    if (mysqli_query($koneksi, $query_delete_payment)) {
+    if (mysqli_query($conn, $query_delete_payment)) {
         echo "Data pembayaran berhasil dihapus.";
         header("Location: index.php?page=home&&hapus=ok");
     } else {
-        echo "Gagal menghapus data pembayaran: " . mysqli_error($koneksi);
+        echo "Gagal menghapus data pembayaran: " . mysqli_error($conn);
     }
 }
 
-// Tutup koneksi
-mysqli_close($koneksi);
+// Tutup conn
+mysqli_close($conn);
 
 
 ?>

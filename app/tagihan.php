@@ -1,4 +1,6 @@
 <?php
+include '../conf/db_connection.php';
+
 // session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -11,16 +13,16 @@ if ($_SESSION['role'] !== 'admin') {
     exit();
 }
 
-// Koneksi ke database (ganti sesuai dengan pengaturan Anda)
-$host = "localhost";
-$db_username = "root";
-$db_password = "";
-$database = "db_iuran";
-$koneksi = mysqli_connect($host, $db_username, $db_password, $database);
+// conn ke database (ganti sesuai dengan pengaturan Anda)
+// $host = "localhost";
+// $db_username = "root";
+// $db_password = "";
+// $database = "db_iuran";
+// $conn = mysqli_connect($host, $db_username, $db_password, $database);
 
-// Cek koneksi
+// Cek conn
 if (mysqli_connect_errno()) {
-    echo "Koneksi database gagal: " . mysqli_connect_error();
+    echo "conn database gagal: " . mysqli_connect_error();
     exit();
 }
 
@@ -32,14 +34,14 @@ $current_page = isset($_GET['pagee']) && is_numeric($_GET['pagee']) ? (int)$_GET
 $where_clause = "";
 $search_keyword = "";
 if(isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
-    $keyword = mysqli_real_escape_string($koneksi, $_GET['keyword']);
+    $keyword = mysqli_real_escape_string($conn, $_GET['keyword']);
     $where_clause = " WHERE username LIKE '%$keyword%'";
     $search_keyword = "&keyword=" . urlencode($keyword);
 }
 
 // Query untuk mengambil jumlah total data sesuai dengan kriteria pencarian
 $query_count = "SELECT COUNT(*) AS total_records FROM tb_users" . $where_clause;
-$result_count = mysqli_query($koneksi, $query_count);
+$result_count = mysqli_query($conn, $query_count);
 $row_count = mysqli_fetch_assoc($result_count);
 $total_records = $row_count['total_records'];
 
@@ -63,7 +65,7 @@ $query_tb_users = "SELECT tb_users.*,
     "GROUP BY tb_users.user_id
     LIMIT $offset, $records_per_page";
 
-$result_tb_users = mysqli_query($koneksi, $query_tb_users);
+$result_tb_users = mysqli_query($conn, $query_tb_users);
 ?>
 
 <!DOCTYPE html>
@@ -139,9 +141,9 @@ $result_tb_users = mysqli_query($koneksi, $query_tb_users);
     </ul>
 </div>
 
-<!-- Tutup koneksi -->
+<!-- Tutup conn -->
 <?php
-mysqli_close($koneksi);
+mysqli_close($conn);
 ?>
 
 </body>

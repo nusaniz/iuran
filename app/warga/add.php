@@ -51,16 +51,17 @@
 </html>
 
 <?php
-// Koneksi ke database
-$host = "localhost";
-$db_username = "root";
-$db_password = "";
-$database = "db_iuran";
-$koneksi = mysqli_connect($host, $db_username, $db_password, $database);
+include '../conf/db_connection.php';
+// conn ke database
+// $host = "localhost";
+// $db_username = "root";
+// $db_password = "";
+// $database = "db_iuran";
+// $conn = mysqli_connect($host, $db_username, $db_password, $database);
 
-// Cek koneksi
+// Cek conn
 if (mysqli_connect_errno()) {
-    die("Koneksi database gagal: " . mysqli_connect_error());
+    die("conn database gagal: " . mysqli_connect_error());
 }
 
 // Proses input data warga
@@ -73,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Query untuk memasukkan data ke tabel warga
     $query = "INSERT INTO tb_warga (nik, nama_lengkap, no_hp, alamat) VALUES ('$nik', '$nama_lengkap', '$no_hp', '$alamat')";
 
-    if (mysqli_query($koneksi, $query)) {
+    if (mysqli_query($conn, $query)) {
         echo '<script>alert("Data warga berhasil ditambahkan.");</script>';
         // header("Location: index.php");
         header("Location: index.php?page=addwarga&&add=ok");
@@ -81,12 +82,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo '<script>alert("Error: ' .
             $query .
             '\n' .
-            mysqli_error($koneksi) .
+            mysqli_error($conn) .
             '");</script>';
     }
 }
 ?>
 
-<?php // Tutup koneksi
-mysqli_close($koneksi);
+<?php // Tutup conn
+mysqli_close($conn);
 ?>

@@ -1,4 +1,5 @@
 <?php
+include 'conf/db_connection.php';
 session_start();
 
 // Pastikan pengguna sudah login sebelum menampilkan halaman
@@ -7,16 +8,16 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Koneksi ke database (sesuaikan dengan pengaturan Anda)
-$host = "localhost";
-$db_username = "root";
-$db_password = "";
-$database = "db_iuran";
-$koneksi = mysqli_connect($host, $db_username, $db_password, $database);
+// conn ke database (sesuaikan dengan pengaturan Anda)
+// $host = "localhost";
+// $db_username = "root";
+// $db_password = "";
+// $database = "db_iuran";
+// $conn = mysqli_connect($host, $db_username, $db_password, $database);
 
-// Cek koneksi
+// Cek conn
 if (mysqli_connect_errno()) {
-    echo "Koneksi database gagal: " . mysqli_connect_error();
+    echo "conn database gagal: " . mysqli_connect_error();
     exit();
 }
 
@@ -41,7 +42,7 @@ if (!empty($search_query)) {
 }
 $query .= " ORDER BY payment_date DESC LIMIT $start_from, $records_per_page";
 
-$result = mysqli_query($koneksi, $query);
+$result = mysqli_query($conn, $query);
 
 // Query untuk menghitung jumlah total record
 $total_rows_query = "SELECT COUNT(*) AS total_rows FROM tb_payments WHERE user_id='$user_id'";
@@ -49,20 +50,20 @@ $total_rows_query = "SELECT COUNT(*) AS total_rows FROM tb_payments WHERE user_i
 if (!empty($search_query)) {
     $total_rows_query .= " AND kode_transaksi LIKE '%$search_query%'";
 }
-$total_rows_result = mysqli_query($koneksi, $total_rows_query);
+$total_rows_result = mysqli_query($conn, $total_rows_query);
 $total_rows_data = mysqli_fetch_assoc($total_rows_result);
 $total_rows = $total_rows_data['total_rows'];
 
 // Query untuk menghitung jumlah tagihan belum dibayar pengguna
 $query_belum_dibayar = "SELECT COUNT(*) AS jumlah_belum_dibayar, SUM(amount) AS total_nominal_belum_dibayar FROM tb_payments WHERE user_id='$user_id' AND status='belum dibayar'";
-$result_belum_dibayar = mysqli_query($koneksi, $query_belum_dibayar);
+$result_belum_dibayar = mysqli_query($conn, $query_belum_dibayar);
 $row_belum_dibayar = mysqli_fetch_assoc($result_belum_dibayar);
 $total_belum_dibayar = $row_belum_dibayar['jumlah_belum_dibayar'];
 $total_nominal_belum_dibayar = $row_belum_dibayar['total_nominal_belum_dibayar'];
 
 // Query untuk menghitung jumlah tagihan yang telah lunas
 $query_lunas = "SELECT COUNT(*) AS jumlah_lunas, SUM(amount) AS total_nominal_lunas FROM tb_payments WHERE user_id='$user_id' AND status='lunas'";
-$result_lunas = mysqli_query($koneksi, $query_lunas);
+$result_lunas = mysqli_query($conn, $query_lunas);
 $row_lunas = mysqli_fetch_assoc($result_lunas);
 $total_lunas = $row_lunas['jumlah_lunas'];
 $total_nominal_lunas = $row_lunas['total_nominal_lunas'];

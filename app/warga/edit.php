@@ -1,14 +1,15 @@
 <?php
-// Koneksi ke database
-$host = "localhost";
-$db_username = "root";
-$db_password = "";
-$database = "db_iuran";
-$koneksi = mysqli_connect($host, $db_username, $db_password, $database);
+include '../conf/db_connection.php';
+// conn ke database
+// $host = "localhost";
+// $db_username = "root";
+// $db_password = "";
+// $database = "db_iuran";
+// $conn = mysqli_connect($host, $db_username, $db_password, $database);
 
-// Cek koneksi
+// Cek conn
 if (mysqli_connect_errno()) {
-    die("Koneksi database gagal: " . mysqli_connect_error());
+    die("conn database gagal: " . mysqli_connect_error());
 }
 
 // Inisialisasi variabel
@@ -31,12 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $query_update = "UPDATE tb_warga SET nik='$nik', nama_lengkap='$nama_lengkap', no_hp='$no_hp', alamat='$alamat' WHERE id = $id";
 
-    if (mysqli_query($koneksi, $query_update)) {
+    if (mysqli_query($conn, $query_update)) {
         // header("Location: index.php");
         header("Location: index.php?page=warga");
         exit();
     } else {
-        echo "Error: " . $query_update . "<br>" . mysqli_error($koneksi);
+        echo "Error: " . $query_update . "<br>" . mysqli_error($conn);
     }
 }
 // http://localhost/iuran/app/index.php?page=warga
@@ -45,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Query untuk mengambil data warga berdasarkan ID
 $query = "SELECT * FROM tb_warga WHERE id = $id";
-$result = mysqli_query($koneksi, $query);
+$result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) == 1) {
     $row = mysqli_fetch_assoc($result);
@@ -106,6 +107,6 @@ if (mysqli_num_rows($result) == 1) {
 </body>
 </html>
 
-<?php // Tutup koneksi
-mysqli_close($koneksi);
+<?php // Tutup conn
+mysqli_close($conn);
 ?>

@@ -42,21 +42,22 @@
         </thead>
         <tbody id="dataTable">
             <?php
-            // Koneksi ke database
-            $host = "localhost";
-            $db_username = "root";
-            $db_password = "";
-            $database = "db_iuran";
-            $koneksi = mysqli_connect(
-                $host,
-                $db_username,
-                $db_password,
-                $database
-            );
+            include '../conf/db_connection.php';
+            // conn ke database
+            // $host = "localhost";
+            // $db_username = "root";
+            // $db_password = "";
+            // $database = "db_iuran";
+            // $conn = mysqli_connect(
+            //     $host,
+            //     $db_username,
+            //     $db_password,
+            //     $database
+            // );
 
-            // Cek koneksi
+            // Cek conn
             if (mysqli_connect_errno()) {
-                die("Koneksi database gagal: " . mysqli_connect_error());
+                die("conn database gagal: " . mysqli_connect_error());
             }
 
             // Pagination
@@ -77,7 +78,7 @@
                 $query_jumlah = $query_jumlah_total;
             }
 
-            $result = mysqli_query($koneksi, $query);
+            $result = mysqli_query($conn, $query);
 
             // Tampilkan data warga dalam tabel
             $nomor_urut = $mulai + 1; // Inisialisasi nomor urut
@@ -105,7 +106,7 @@
             // http://localhost/iuran/app/index.php?page=warga&&halaman=2
 
             // Menghitung total halaman
-            $result_jumlah = mysqli_query($koneksi, $query_jumlah);
+            $result_jumlah = mysqli_query($conn, $query_jumlah);
             $data_jumlah = mysqli_fetch_assoc($result_jumlah);
             $total_halaman = ceil($data_jumlah["jumlah"] / $limit);
 
@@ -134,7 +135,7 @@
             } else {
                 // Menampilkan total data dari seluruh tabel jika tidak ada pencarian
                 $result_jumlah_total = mysqli_query(
-                    $koneksi,
+                    $conn,
                     $query_jumlah_total
                 );
                 $data_jumlah_total = mysqli_fetch_assoc($result_jumlah_total);
@@ -147,7 +148,7 @@
             if (isset($_GET["hapus_id"])) {
                 $hapus_id = $_GET["hapus_id"];
                 $query_hapus = "DELETE FROM tb_warga WHERE id = $hapus_id";
-                if (mysqli_query($koneksi, $query_hapus)) {
+                if (mysqli_query($conn, $query_hapus)) {
                     echo "<script>alert('Data berhasil dihapus');</script>";
                     echo "<script>window.location.href='index.php';</script>";
                 } else {
@@ -156,8 +157,8 @@
                 }
             }
 
-            // Tutup koneksi
-            mysqli_close($koneksi);
+            // Tutup conn
+            mysqli_close($conn);
             ?>
         </tbody>
     </table>

@@ -1,4 +1,6 @@
 <?php
+
+include '../conf/db_connection.php';
 // session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -11,21 +13,21 @@ if ($_SESSION['role'] !== 'admin') {
     exit();
 }
 
-// Koneksi ke database (ganti sesuai dengan pengaturan Anda)
-$host = "localhost";
-$db_username = "root";
-$db_password = "";
-$database = "db_iuran";
-$koneksi = mysqli_connect($host, $db_username, $db_password, $database);
+// conn ke database (ganti sesuai dengan pengaturan Anda)
+// $host = "localhost";
+// $db_username = "root";
+// $db_password = "";
+// $database = "db_iuran";
+// $conn = mysqli_connect($host, $db_username, $db_password, $database);
 
-// Cek koneksi
+// Cek conn
 if (mysqli_connect_errno()) {
-    echo "Koneksi database gagal: " . mysqli_connect_error();
+    echo "conn database gagal: " . mysqli_connect_error();
     exit();
 }
 
 // Fungsi untuk generate kode transaksi otomatis
-function generateTransactionCode($koneksi) {
+function generateTransactionCode($conn) {
     // Mendapatkan tanggal dan waktu saat ini
     $currentDateTime = date("YmdHis");
 
@@ -37,13 +39,13 @@ function generateTransactionCode($koneksi) {
 
     // Periksa keberadaan kode transaksi dalam database
     $query_check_duplicate = "SELECT COUNT(*) AS total FROM tb_payments WHERE kode_transaksi='$transactionCode'";
-    $result_check_duplicate = mysqli_query($koneksi, $query_check_duplicate);
+    $result_check_duplicate = mysqli_query($conn, $query_check_duplicate);
     $row_check_duplicate = mysqli_fetch_assoc($result_check_duplicate);
     $total_duplicates = $row_check_duplicate['total'];
 
     // Jika kode transaksi duplikat, panggil fungsi kembali untuk menghasilkan kode baru
     if ($total_duplicates > 0) {
-        return generateTransactionCode($koneksi);
+        return generateTransactionCode($conn);
     } else {
         return $transactionCode;
     }
@@ -57,12 +59,12 @@ $query_tb_users = "SELECT tb_users.*,
     FROM tb_users 
     LEFT JOIN tb_payments ON tb_users.user_id = tb_payments.user_id 
     GROUP BY tb_users.user_id";
-$result_tb_users = mysqli_query($koneksi, $query_tb_users);
+$result_tb_users = mysqli_query($conn, $query_tb_users);
 
 // Search feature
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $query_tb_payments = "SELECT tb_users.username, tb_payments.amount, tb_payments.invoice_date, tb_payments.kode_transaksi, tb_payments.status, tb_payments.payment_date, tb_payments.payment_id FROM tb_payments LEFT JOIN tb_users ON tb_payments.user_id = tb_users.user_id WHERE tb_users.username LIKE '%$search%' OR tb_payments.kode_transaksi LIKE '%$search%'";
-$result_tb_payments = mysqli_query($koneksi, $query_tb_payments);
+$result_tb_payments = mysqli_query($conn, $query_tb_payments);
 $total_records = mysqli_num_rows($result_tb_payments);
 
 // Batasi jumlah data per halaman
@@ -89,7 +91,7 @@ $offset = ($current_page - 1) * $records_per_page;
 
 // Perbarui query untuk menambahkan LIMIT dan OFFSET
 $query_tb_payments .= " LIMIT $offset, $records_per_page";
-$result_tb_payments = mysqli_query($koneksi, $query_tb_payments);
+$result_tb_payments = mysqli_query($conn, $query_tb_payments);
 ?>
 
 <!DOCTYPE html>
@@ -144,13 +146,13 @@ $result_tb_payments = mysqli_query($koneksi, $query_tb_payments);
             <label for="amount">Jumlah Tagihan:</label>
             <input type="number" id="amount" name="amount" class="form-control" required>
         </div>
-        <input type="hidden" name="kode_transaksi" value="<?php echo generateTransactionCode($koneksi); ?>"> <!-- Tambahkan input hidden untuk kode transaksi -->
+        <input type="hidden" name="kode_transaksi" value="<?php echo generateTransactionCode($conn); ?>"> <!-- Tambahkan input hidden untuk kode transaksi -->
         <button type="submit" class="btn btn-primary">Input Tagihan</button>
     </form>
 
     <!-- Form untuk membuat tagihan untuk semua warga -->
     <form action="process_payment_all.php" method="post" class="mt-3">
-        <input type="hidden" name="kode_transaksi" value="<?php echo generateTransactionCode($koneksi); ?>">
+        <input type="hidden" name="kode_transaksi" value="<?php echo generateTransactionCode($conn); ?>">
         <input type="number" name="amount" placeholder="Jumlah Tagihan untuk Semua Warga" class="form-control" required>
         <button type="submit" class="btn btn-primary mt-2">Input Tagihan untuk Semua Warga</button>
     </form>
@@ -258,9 +260,9 @@ $result_tb_payments = mysqli_query($koneksi, $query_tb_payments);
 
 </div>
 
-<!-- Tutup koneksi -->
+<!-- Tutup conn -->
 <?php
-mysqli_close($koneksi);
+mysqli_close($conn);
 ?>
 
 </body>

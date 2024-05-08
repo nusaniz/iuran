@@ -1,4 +1,6 @@
 <?php
+include '../conf/db_connection.php';
+
 // session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -11,16 +13,16 @@ if ($_SESSION['role'] !== 'admin') {
     exit();
 }
 
-// Koneksi ke database (ganti sesuai dengan pengaturan Anda)
-$host = "localhost";
-$db_username = "root";
-$db_password = "";
-$database = "db_iuran";
-$koneksi = mysqli_connect($host, $db_username, $db_password, $database);
+// conn ke database (ganti sesuai dengan pengaturan Anda)
+// $host = "localhost";
+// $db_username = "root";
+// $db_password = "";
+// $database = "db_iuran";
+// $conn = mysqli_connect($host, $db_username, $db_password, $database);
 
-// Cek koneksi
+// Cek conn
 if (mysqli_connect_errno()) {
-    echo "Koneksi database gagal: " . mysqli_connect_error();
+    echo "conn database gagal: " . mysqli_connect_error();
     exit();
 }
 
@@ -30,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_payment'])) {
 
     // Query untuk mengambil data pembayaran berdasarkan payment_id dan menggabungkan dengan data dari tabel tb_users
     $query_payment_detail = "SELECT tb_payments.*, tb_users.username FROM tb_payments JOIN tb_users ON tb_payments.user_id = tb_users.user_id WHERE payment_id='$payment_id'";
-    $result_payment_detail = mysqli_query($koneksi, $query_payment_detail);
+    $result_payment_detail = mysqli_query($conn, $query_payment_detail);
     $row_payment_detail = mysqli_fetch_assoc($result_payment_detail);
 }
 ?>
@@ -72,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_payment'])) {
         <button type="submit" name="submit" class="btn btn-primary">Simpan Perubahan</button>
     </form>
 
-    <?php mysqli_close($koneksi); ?>
+    <?php mysqli_close($conn); ?>
 
 </div>
 
