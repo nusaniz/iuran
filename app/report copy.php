@@ -55,35 +55,35 @@ while ($row_month = mysqli_fetch_assoc($result_month)) {
 }
 
 
-// Pagination tabel tanggal
-    // Mengatur jumlah baris per halaman
-    $rowsPerPage = 5;
+// Tentukan parameter pagination
+$rows_per_page = 5; // Misalnya, 10 item per halaman
+$current_page_month = isset($_GET['page_month']) ? $_GET['page_month'] : 1;
+$current_page_totals = isset($_GET['page_totals']) ? $_GET['page_totals'] : 1;
 
-    // Menghitung jumlah total baris
-    $totalRows = count($data_totals);
+// Hitung offset untuk query
+$offset_month = ($current_page_month - 1) * $rows_per_page;
+$offset_totals = ($current_page_totals - 1) * $rows_per_page;
 
-    // Menghitung jumlah halaman
-    $totalPages = ceil($totalRows / $rowsPerPage);
+// Ubah query untuk memperhitungkan offset dan limit
+$query_month .= " LIMIT $offset_month, $rows_per_page";
+$query_totals .= " LIMIT $offset_totals, $rows_per_page";
 
-    // Mendapatkan halaman saat ini
-    if (isset($_GET['hal']) && is_numeric($_GET['hal'])) {
-        $currentPage = (int)$_GET['hal'];
-    } else {
-        $currentPage = 1;
+// Function untuk rendering pagination
+function renderPagination($total_pages, $current_page, $url_param) {
+    $pagination = '<nav aria-label="Page navigation"><ul class="pagination">';
+    $prev_class = ($current_page == 1) ? 'disabled' : '';
+    $pagination .= '<li class="page-item ' . $prev_class . '"><a class="page-link" href="?'.$url_param.'=' . ($current_page - 1) . '" aria-label="Previous"><span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>';
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $active_class = ($current_page == $i) ? 'active' : '';
+        $pagination .= '<li class="page-item ' . $active_class . '"><a class="page-link" href="?'.$url_param.'=' . $i . '">' . $i . '</a></li>';
     }
+    $next_class = ($current_page == $total_pages || $total_pages == 0) ? 'disabled' : '';
+    $pagination .= '<li class="page-item ' . $next_class . '"><a class="page-link" href="?'.$url_param.'=' . ($current_page + 1) . '" aria-label="Next"><span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a></li>';
+    $pagination .= '</ul></nav>';
+    return $pagination;
+}
 
-    // Memastikan halaman saat ini berada dalam rentang yang valid
-    if ($currentPage > $totalPages) {
-        $currentPage = $totalPages;
-    } elseif ($currentPage < 1) {
-        $currentPage = 1;
-    }
 
-    // Menghitung offset untuk query
-    $offset = ($currentPage - 1) * $rowsPerPage;
-
-    // Mengambil data untuk halaman saat ini
-    $dataPerPage = array_slice($data_totals, $offset, $rowsPerPage);
 
 ?>
 
@@ -120,10 +120,15 @@ while ($row_month = mysqli_fetch_assoc($result_month)) {
             </tbody>
         </table>
 
+        <!-- Pagination untuk data pembayaran lunas tiap bulan -->
+        <?php echo renderPagination(ceil(count($data_month) / $rows_per_page), $current_page_month, 'page_month'); ?>
+
         <!-- Data pembayaran tiap tanggal -->
         <h1>Total Nominal dan Data Pembayaran per Tanggal</h1>
 
         <canvas id="paymentChart" width="800" height="400"></canvas>
+
+
 
         <table class="table">
             <thead class="thead-dark">
@@ -136,40 +141,20 @@ while ($row_month = mysqli_fetch_assoc($result_month)) {
                 </tr>
             </thead>
             <tbody>
-            <?php foreach ($dataPerPage as $row_totals): ?>
-            <tr>
-                <td><?php echo $row_totals["tanggal"]; ?></td>
-                <td><?php echo $row_totals["total_nominal_lunas"]; ?></td>
-                <td><?php echo $row_totals["total_nominal_belum_dibayar"]; ?></td>
-                <td><?php echo $row_totals["total_data_lunas"]; ?></td>
-                <td><?php echo $row_totals["total_data_belum_dibayar"]; ?></td>
-            </tr>
-            <?php endforeach; ?>
-
+                <?php foreach ($data_totals as $row_totals): ?>
+                <tr>
+                    <td><?php echo $row_totals["tanggal"]; ?></td>
+                    <td><?php echo $row_totals["total_nominal_lunas"]; ?></td>
+                    <td><?php echo $row_totals["total_nominal_belum_dibayar"]; ?></td>
+                    <td><?php echo $row_totals["total_data_lunas"]; ?></td>
+                    <td><?php echo $row_totals["total_data_belum_dibayar"]; ?></td>
+                </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
-        <div class="row">
-    <div class="col">
-        <ul class="pagination justify-content-center">
-            <?php if ($currentPage > 1): ?>
-                <li class="page-item">
-                    <a class="page-link" href="?page=report&&hal=<?php echo ($currentPage - 1); ?>">Previous</a>
-                </li>
-            <?php endif; ?>
-            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                <li class="page-item <?php echo ($i === $currentPage) ? 'active' : ''; ?>">
-                    <a class="page-link" href="?page=report&&hal=<?php echo $i; ?>"><?php echo $i; ?></a>
-                </li>
-            <?php endfor; ?>
-            <?php if ($currentPage < $totalPages): ?>
-                <li class="page-item">
-                    <a class="page-link" href="?page=report&&hal=<?php echo ($currentPage + 1); ?>">Next</a>
-                </li>
-            <?php endif; ?>
-        </ul>
-    </div>
-</div>
 
+        <!-- Pagination untuk data pembayaran tiap tanggal -->
+        <?php echo renderPagination(ceil(count($data_totals) / $rows_per_page), $current_page_totals, 'page_totals'); ?>
     </div>
 
     <!-- Bootstrap JS -->
@@ -231,7 +216,9 @@ while ($row_month = mysqli_fetch_assoc($result_month)) {
             }
         }
     });
-    </script>
+</script>
+
+
 </body>
 </html>
 
