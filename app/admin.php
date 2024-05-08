@@ -79,13 +79,13 @@
             </table>
             
             <!-- Pagination -->
-            
+
             <!-- Pagination -->
-            <nav aria-label="Page navigation example">
+            <!-- <nav aria-label="Page navigation example">
                 <ul id="pagination" class="pagination justify-content-center">
                     <?php include 'pagination.php'; ?>
                 </ul>
-            </nav>
+            </nav> -->
         </div>
     </div>
 
