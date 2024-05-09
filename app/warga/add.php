@@ -52,12 +52,19 @@
             <textarea class="form-control" id="alamat" name="alamat"></textarea>
         </div>
         <div class="form-group">
-              <label for="role">Role:</label>
-              <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
-                  <option value="admin">Admin</option>
-                  <option value="user">User</option>
-              </select>
-          </div>
+            <label for="role">Role:</label>
+            <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="jabatan">Jabatan:</label>
+            <select class="selectpicker form-control" id="jabatan" name="jabatan" data-live-search="true">
+                <option value="direktur">direktur</option>
+                <option value="pegawai">pegawai</option>
+            </select>
+        </div>
         <button type="submit" class="btn btn-primary">Tambah Data</button>
     </form>
 </div>
@@ -88,9 +95,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $no_hp = $_POST["no_hp"];
     $alamat = $_POST["alamat"];
     $role = $_POST["role"];
+    $jabatan = $_POST["jabatan"];
 
     // Query untuk memasukkan data ke tabel warga
-    $query = "INSERT INTO tb_users (username, password, nik, nama_lengkap, no_hp, alamat, role) VALUES ('$username','$password','$nik', '$nama_lengkap', '$no_hp', '$alamat', '$role')";
+    $query = "INSERT INTO tb_users (username, password, nik, nama_lengkap, no_hp, alamat, role, jabatan) VALUES ('$username','$password','$nik', '$nama_lengkap', '$no_hp', '$alamat', '$role', '$jabatan')";
 
     if (mysqli_query($conn, $query)) {
         echo '<script>alert("Data warga berhasil ditambahkan.");</script>';

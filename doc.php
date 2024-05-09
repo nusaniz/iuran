@@ -1,5 +1,10 @@
 <?php
+// session_start();
 if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
+if (!isset($_SESSION['jabatan'])) {
     header("Location: index.php");
     exit();
 }
@@ -11,23 +16,23 @@ if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-// Ambil dokumen yang memiliki status publish
-$sql = "SELECT * FROM tb_dokumen WHERE status='aktif'";
+// Ambil jabatan dari session
+$jabatan = $_SESSION['jabatan'];
+
+// Ambil dokumen yang memiliki status aktif dan role_dokumen sesuai dengan jabatan
+$sql = "SELECT * FROM tb_dokumen WHERE status='aktif' AND FIND_IN_SET('$jabatan', role_dokumen)";
 
 // Inisialisasi variabel untuk pencarian dan pagination
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-// $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $hal = isset($_GET['hal']) ? intval($_GET['hal']) : 1;
 $limit = 5; // Jumlah data per halaman
-// $offset = ($page - 1) * $limit;
 $offset = max(0, ($hal - 1) * $limit);
 
 // Query untuk mencari data berdasarkan nama
-// $query_search = "SELECT * FROM tb_dokumen WHERE nama LIKE '%$search%'";
-$query_search = "SELECT * FROM tb_dokumen WHERE nama LIKE '%$search%' AND status='aktif'";
+$query_search = "SELECT * FROM tb_dokumen WHERE nama LIKE '%$search%' AND status='aktif' AND FIND_IN_SET('$jabatan', role_dokumen)";
 
 // Query untuk menghitung jumlah total data
-$query_count = "SELECT COUNT(*) as total FROM tb_dokumen WHERE nama LIKE '%$search%' AND status='aktif'";
+$query_count = "SELECT COUNT(*) as total FROM tb_dokumen WHERE nama LIKE '%$search%' AND status='aktif' AND FIND_IN_SET('$jabatan', role_dokumen)";
 $result_count = mysqli_query($conn, $query_count);
 $row_count = mysqli_fetch_assoc($result_count);
 $total_data = $row_count['total'];
@@ -40,6 +45,7 @@ $query = $query_search . " LIMIT $limit OFFSET $offset";
 $result = mysqli_query($conn, $query);
 ?>
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,6 +54,7 @@ $result = mysqli_query($conn, $query);
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 </head>
 <body>
+
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col">

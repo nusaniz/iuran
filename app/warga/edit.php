@@ -32,8 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $no_hp = $_POST["no_hp"];
     $alamat = $_POST["alamat"];
     $role = $_POST["role"];
+    $jabatan = $_POST["jabatan"];
 
-    $query_update = "UPDATE tb_users SET username='$username', password='$password', nik='$nik', nama_lengkap='$nama_lengkap', no_hp='$no_hp', alamat='$alamat', role='$role' WHERE user_id = $id";
+    $query_update = "UPDATE tb_users SET username='$username', password='$password', nik='$nik', nama_lengkap='$nama_lengkap', no_hp='$no_hp', alamat='$alamat', role='$role', jabatan='$jabatan' WHERE user_id = $id";
 
     if (mysqli_query($conn, $query_update)) {
         // header("Location: index.php");
@@ -60,6 +61,7 @@ if (mysqli_num_rows($result) == 1) {
     $no_hp = $row["no_hp"];
     $alamat = $row["alamat"];
     $role = $row["role"];
+    $jabatan = ["jabatan"];
 } else {
     echo "Data warga tidak ditemukan.";
     exit();
@@ -130,8 +132,15 @@ if (mysqli_num_rows($result) == 1) {
               <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
             <option value="admin" <?php if($role == "admin") echo "selected"; ?>>admin</option>
             <option value="user" <?php if($role == "user") echo "selected"; ?>>user</option>
-        </select>
-          </div>
+            </select>
+        </div>
+        <div class="form-group">
+              <label for="jabatan">Jabatan:</label>
+              <select class="selectpicker form-control" id="jabatan" name="jabatan" data-live-search="true">
+            <option value="direktur" <?php if($jabatan == "direktur") echo "selected"; ?>>direktur</option>
+            <option value="pegawai" <?php if($jabatan == "pegawai") echo "selected"; ?>>pegawai</option>
+            </select>
+        </div>
 
           
         <button type="submit" class="btn btn-primary">Update Data</button>

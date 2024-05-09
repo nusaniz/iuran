@@ -39,6 +39,7 @@
                 <th>Nomor HP</th>
                 <th>Alamat</th>
                 <th>Role</th>
+                <th>Jabatan</th>
                 <th>Created At</th>
                 <th>Aksi</th>
             </tr>
@@ -96,6 +97,7 @@
                 echo "<td>" . $row["no_hp"] . "</td>";
                 echo "<td>" . $row["alamat"] . "</td>";
                 echo "<td>" . $row["role"] . "</td>";
+                echo "<td>" . $row["jabatan"] . "</td>";
                 echo "<td>" . $row["created_at"] . "</td>";
                 echo "<td>";
                 echo "<a class='btn btn-primary' href='?page=editwarga&&id=" .

@@ -20,6 +20,8 @@
             $row = mysqli_fetch_assoc($result);
             $nama_dokumen = $row["nama"];
             $status_dokumen = $row["status"];
+            // Mendapatkan peran dokumen dari database
+            $role_dokumen = explode(',', $row["role_dokumen"]); // Jika peran dokumen disimpan sebagai string dipisahkan oleh koma
         } else {
             echo "Dokumen tidak ditemukan.";
             exit();
@@ -28,9 +30,6 @@
         echo "ID Dokumen tidak diberikan.";
         exit();
     }
-
-
-    
     ?>
 
 <div class="container mt-5">
@@ -48,6 +47,21 @@
             <div class="form-group">
                 <label for="file_dokumen">Pilih File Dokumen Baru:</label>
                 <input type="file" class="form-control-file" name="file_dokumen" id="file_dokumen">
+            </div>
+            <div class="form-group">
+                <label for="role_dokumen">Role Dokumen:</label>
+                <!-- <select name="role_dokumen[]" id="role_dokumen" multiple>
+                <option value="direktur">Direktur</option>
+                    <option value="pegawai">Pegawai</option>
+                    <option value="nilai3">Nilai 3</option>
+                    <option value="">NULL</option>
+                </select> -->
+                <select name="role_dokumen[]" id="role_dokumen" multiple>
+                    <option value="direktur" <?php if(in_array("direktur", $role_dokumen)) echo "selected"; ?>>Direktur</option>
+                    <option value="pegawai" <?php if(in_array("pegawai", $role_dokumen)) echo "selected"; ?>>Pegawai</option>
+                    <option value="nilai3" <?php if(in_array("nilai3", $role_dokumen)) echo "selected"; ?>>Nilai 3</option>
+                    <option value="" <?php if(in_array("", $role_dokumen)) echo "selected"; ?>>NULL</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="status_dokumen">Status Dokumen:</label>
