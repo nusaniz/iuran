@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 08 Bulan Mei 2024 pada 17.45
+-- Waktu pembuatan: 09 Bulan Mei 2024 pada 12.59
 -- Versi server: 10.4.25-MariaDB
 -- Versi PHP: 8.1.10
 
@@ -20,6 +20,40 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_iuran`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `tb_dokumen`
+--
+
+CREATE TABLE `tb_dokumen` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(255) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `status` enum('aktif','nonaktif') NOT NULL DEFAULT 'nonaktif',
+  `role_dokumen` set('direktur','pegawai') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `keterangan` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `tb_dokumen`
+--
+
+INSERT INTO `tb_dokumen` (`id`, `nama`, `file_path`, `status`, `role_dokumen`, `created_at`, `keterangan`) VALUES
+(23, 'sayur', 'uploads/Book4(2).csv', 'aktif', 'direktur', '2024-05-08 19:08:20', ''),
+(24, 'sdf', 'uploads/tb_payments(1).sql', 'aktif', 'direktur', '2024-05-08 19:08:20', ''),
+(26, 'qqqqqassa', 'uploads/tb_payments.sql', 'aktif', 'direktur,pegawai', '2024-05-08 19:08:40', ''),
+(27, 'qw', 'uploads/Book4.csv', 'aktif', 'direktur,pegawai', '2024-05-08 19:46:08', ''),
+(29, 'aku', 'uploads/halo_export_2024-05-04.csv', 'aktif', 'direktur', '2024-05-09 01:30:07', ''),
+(30, 'angg', 'uploads/halo_export_2024-05-04.csv', 'aktif', '', '2024-05-09 01:31:24', ''),
+(31, 'aji', 'uploads/halo_export_2024-04-28.csv', 'aktif', '', '2024-05-09 01:33:35', ''),
+(32, 'qwqwqwqwqw', 'uploads/halo_export_2024-04-28.csv', 'aktif', '', '2024-05-09 01:33:48', ''),
+(33, 'rahasia', 'uploads/Book4(1).csv', 'aktif', '', '2024-05-09 03:53:38', ''),
+(34, 'coba', 'uploads/halo_export_2024-04-28(1).csv', 'aktif', '', '2024-05-09 09:18:55', ''),
+(35, 'putusan', 'uploads/halo_export_2024-04-28(1).csv', 'aktif', 'direktur,pegawai', '2024-05-09 10:04:50', ''),
+(36, 'yua', 'uploads/Book4(2).csv', 'aktif', 'direktur,pegawai', '2024-05-09 10:12:58', '');
 
 -- --------------------------------------------------------
 
@@ -155,7 +189,7 @@ INSERT INTO `tb_payments` (`payment_id`, `user_id`, `amount`, `payment_date`, `s
 (111, 157, '1000', '2024-05-08 13:07:46', '', 'TRX-20240508150746-2', '2024-05-08 08:07:45'),
 (112, 158, '1000', '2024-05-08 13:07:46', '', 'TRX-20240508150746-8', '2024-05-08 08:07:45'),
 (113, 159, '1000', '2024-05-08 13:07:47', '', 'TRX-20240508150747-3', '2024-05-08 08:07:45'),
-(114, 163, '1000', '2024-05-08 13:07:47', '', 'TRX-20240508150747-8', '2024-05-08 08:07:45'),
+(114, 163, '1000', '2024-05-08 13:07:47', 'lunas', 'TRX-20240508150747-8', '2024-05-08 08:07:45'),
 (115, 164, '1000', '2024-05-08 13:07:47', '', 'TRX-20240508150747-f', '2024-05-08 08:07:45'),
 (116, 1, '9', '2024-05-08 13:38:42', '', 'TRX-20240508153842-c', '2024-05-08 08:38:42'),
 (117, 140, '9', '2024-05-08 13:38:42', '', 'TRX-20240508153842-f', '2024-05-08 08:38:42'),
@@ -178,7 +212,7 @@ INSERT INTO `tb_payments` (`payment_id`, `user_id`, `amount`, `payment_date`, `s
 (134, 157, '9', '2024-05-08 13:38:43', '', 'TRX-20240508153843-b', '2024-05-08 08:38:42'),
 (135, 158, '9', '2024-05-08 13:38:43', '', 'TRX-20240508153843-7', '2024-05-08 08:38:42'),
 (136, 159, '9', '2024-05-08 13:38:43', '', 'TRX-20240508153843-3', '2024-05-08 08:38:42'),
-(137, 163, '9', '2024-05-08 13:38:43', '', 'TRX-20240508153843-6', '2024-05-08 08:38:42'),
+(137, 163, '9', '2024-05-08 13:38:43', 'belum dibayar', 'TRX-20240508153843-6', '2024-05-08 08:38:42'),
 (138, 164, '9', '2024-05-08 13:38:43', '', 'TRX-20240508153843-1', '2024-05-08 08:38:42'),
 (139, 1, '2', '2024-06-29 17:00:00', 'lunas', 'TRX-20240508154037-6', '2024-05-08 08:40:37'),
 (140, 140, '2', '2024-06-29 17:00:00', 'lunas', 'TRX-20240508154037-0', '2024-05-08 08:40:37'),
@@ -317,7 +351,8 @@ INSERT INTO `tb_payments` (`payment_id`, `user_id`, `amount`, `payment_date`, `s
 (273, 158, '89', '2024-05-08 14:06:47', 'belum dibayar', 'TRX-20240508160647-8', '2024-05-08 09:06:47'),
 (274, 159, '89', '2024-05-08 14:06:47', 'belum dibayar', 'TRX-20240508160647-a', '2024-05-08 09:06:47'),
 (275, 163, '89', '2024-05-08 14:06:47', 'belum dibayar', 'TRX-20240508160647-3', '2024-05-08 09:06:47'),
-(276, 164, '89', '2024-05-08 14:06:47', 'belum dibayar', 'TRX-20240508160647-f', '2024-05-08 09:06:47');
+(276, 164, '89', '2024-05-08 14:06:47', 'belum dibayar', 'TRX-20240508160647-f', '2024-05-08 09:06:47'),
+(277, 163, '12', '2024-05-09 04:25:13', 'belum dibayar', 'TRX-20240509062446-a', '2024-05-08 23:25:13');
 
 -- --------------------------------------------------------
 
@@ -336,37 +371,39 @@ CREATE TABLE `tb_users` (
   `nama_lengkap` varchar(255) DEFAULT NULL,
   `no_hp` varchar(20) DEFAULT NULL,
   `alamat` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `jabatan` enum('direktur','pegawai') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `tb_users`
 --
 
-INSERT INTO `tb_users` (`user_id`, `username`, `password`, `role`, `total_lunas`, `total_belum_bayar`, `nik`, `nama_lengkap`, `no_hp`, `alamat`, `created_at`) VALUES
-(1, 'admin', '', 'admin', '0.00', '0.00', '', 'Admin', '', '', '2024-05-08 06:48:03'),
-(140, 'john_doe', '', 'user', '0.00', '0.00', '1234567890', 'John Doe', '081234567890', 'Jl. Contoh No. 1', '2024-05-08 06:37:52'),
-(141, 'jane_doe', '', 'user', '0.00', '0.00', '0987654321', 'Jane Doe', '081234567891', 'Jl. Contoh No. 2', '2024-05-08 06:37:52'),
-(142, 'alice_smith', '', 'user', '0.00', '0.00', '2345678901', 'Alice Smith', '081234567892', 'Jl. Contoh No. 3', '2024-05-08 06:37:52'),
-(143, 'bob_johnson', '', 'user', '0.00', '0.00', '3456789012', 'Bob Johnson', '081234567893', 'Jl. Contoh No. 4', '2024-05-08 06:37:52'),
-(144, 'emily_brown', '', 'user', '0.00', '0.00', '4567890123', 'Emily Brown', '081234567894', 'Jl. Contoh No. 5', '2024-05-08 06:37:52'),
-(145, 'michael_wilson', '', 'user', '0.00', '0.00', '5678901234', 'Michael Wilson', '081234567895', 'Jl. Contoh No. 6', '2024-05-08 06:37:52'),
-(146, 'sarah_garcia', '', 'admin', '0.00', '0.00', '6789012345', 'Sarah Garcia', '081234567896', 'Jl. Contoh No. 7', '2024-05-08 06:37:52'),
-(147, 'david_martinez', '', 'user', '0.00', '0.00', '7890123456', 'David Martinez', '081234567897', 'Jl. Contoh No. 8', '2024-05-08 06:37:52'),
-(148, 'lisa_robinson', '', 'user', '0.00', '0.00', '8901234567', 'Lisa Robinson', '081234567898', 'Jl. Contoh No. 9', '2024-05-08 06:37:52'),
-(149, 'paul_clark', '', 'user', '0.00', '0.00', '9012345678', 'Paul Clark', '081234567899', 'Jl. Contoh No. 10', '2024-05-08 06:37:52'),
-(150, 'jessica_lewis', '', 'user', '0.00', '0.00', '0123456789', 'Jessica Lewis', '081234567800', 'Jl. Contoh No. 11', '2024-05-08 06:37:52'),
-(151, 'kevin_lee', '', 'user', '0.00', '0.00', '5432109876', 'Kevin Lee', '081234567801', 'Jl. Contoh No. 12', '2024-05-08 06:37:52'),
-(152, 'amanda_walker', '', 'user', '0.00', '0.00', '6543210987', 'Amanda Walker', '081234567802', 'Jl. Contoh No. 13', '2024-05-08 06:37:52'),
-(153, 'daniel_hall', '', 'user', '0.00', '0.00', '7654321098', 'Daniel Hall', '081234567803', 'Jl. Contoh No. 14', '2024-05-08 06:37:52'),
-(154, 'ashley_young', '', 'user', '0.00', '0.00', '8765432109', 'Ashley Young', '081234567804', 'Jl. Contoh No. 15', '2024-05-08 06:37:52'),
-(155, 'matthew_hernandez', '', 'user', '0.00', '0.00', '9876543210', 'Matthew Hernandez', '081234567805', 'Jl. Contoh No. 16', '2024-05-08 06:37:52'),
-(156, 'jennifer_king', '', 'user', '0.00', '0.00', '3210987654', 'Jennifer King', '081234567806', 'Jl. Contoh No. 17', '2024-05-08 06:37:52'),
-(157, 'joshua_wright', '', 'user', '0.00', '0.00', '4321098765', 'Joshua Wright', '081234567807', 'Jl. Contoh No. 18', '2024-05-08 06:37:52'),
-(158, 'nicole_lopez', '', 'user', '0.00', '0.00', '2109876543', 'Nicole Lopez', '081234567808', 'Jl. Contoh No. 19', '2024-05-08 06:37:52'),
-(159, 'andrew_hill', '', 'user', '0.00', '0.00', '1098765432', 'Andrew Hill', '081234567809', 'Jl. Contoh No. 20', '2024-05-08 06:37:52'),
-(163, 'kia', 'passkia', 'user', '0.00', '0.00', '', 'nama kia', '', '', '2024-05-08 07:08:08'),
-(164, 'citra', '', 'user', '0.00', '0.00', '', 'Citra', '', '', '2024-05-08 07:17:08');
+INSERT INTO `tb_users` (`user_id`, `username`, `password`, `role`, `total_lunas`, `total_belum_bayar`, `nik`, `nama_lengkap`, `no_hp`, `alamat`, `created_at`, `jabatan`) VALUES
+(1, 'admin', '', 'admin', '0.00', '0.00', '', 'Admin', '', '', '2024-05-08 06:48:03', NULL),
+(140, 'john_doe', '', 'user', '0.00', '0.00', '1234567890', 'John Doe', '081234567890', 'Jl. Contoh No. 1', '2024-05-08 06:37:52', NULL),
+(141, 'jane_doe', '', 'user', '0.00', '0.00', '0987654321', 'Jane Doe', '081234567891', 'Jl. Contoh No. 2', '2024-05-08 06:37:52', NULL),
+(142, 'alice_smith', '', 'user', '0.00', '0.00', '2345678901', 'Alice Smith', '081234567892', 'Jl. Contoh No. 3', '2024-05-08 06:37:52', 'pegawai'),
+(143, 'bob_johnson', '', 'user', '0.00', '0.00', '3456789012', 'Bob Johnson', '081234567893', 'Jl. Contoh No. 4', '2024-05-08 06:37:52', NULL),
+(144, 'emily_brown', '', 'user', '0.00', '0.00', '4567890123', 'Emily Brown', '081234567894', 'Jl. Contoh No. 5', '2024-05-08 06:37:52', NULL),
+(145, 'michael_wilson', '', 'user', '0.00', '0.00', '5678901234', 'Michael Wilson', '081234567895', 'Jl. Contoh No. 6', '2024-05-08 06:37:52', NULL),
+(146, 'sarah_garcia', '', 'admin', '0.00', '0.00', '6789012345', 'Sarah Garcia', '081234567896', 'Jl. Contoh No. 7', '2024-05-08 06:37:52', NULL),
+(147, 'david_martinez', '', 'user', '0.00', '0.00', '7890123456', 'David Martinez', '081234567897', 'Jl. Contoh No. 8', '2024-05-08 06:37:52', NULL),
+(148, 'lisa_robinson', '', 'user', '0.00', '0.00', '8901234567', 'Lisa Robinson', '081234567898', 'Jl. Contoh No. 9', '2024-05-08 06:37:52', NULL),
+(149, 'paul_clark', '', 'user', '0.00', '0.00', '9012345678', 'Paul Clark', '081234567899', 'Jl. Contoh No. 10', '2024-05-08 06:37:52', NULL),
+(150, 'jessica_lewis', '', 'user', '0.00', '0.00', '0123456789', 'Jessica Lewis', '081234567800', 'Jl. Contoh No. 11', '2024-05-08 06:37:52', NULL),
+(151, 'kevin_lee', '', 'user', '0.00', '0.00', '5432109876', 'Kevin Lee', '081234567801', 'Jl. Contoh No. 12', '2024-05-08 06:37:52', NULL),
+(152, 'amanda_walker', '', 'user', '0.00', '0.00', '6543210987', 'Amanda Walker', '081234567802', 'Jl. Contoh No. 13', '2024-05-08 06:37:52', NULL),
+(153, 'daniel_hall', '', 'user', '0.00', '0.00', '7654321098', 'Daniel Hall', '081234567803', 'Jl. Contoh No. 14', '2024-05-08 06:37:52', NULL),
+(154, 'ashley_young', '', 'user', '0.00', '0.00', '8765432109', 'Ashley Young', '081234567804', 'Jl. Contoh No. 15', '2024-05-08 06:37:52', NULL),
+(155, 'matthew_hernandez', '', 'user', '0.00', '0.00', '9876543210', 'Matthew Hernandez', '081234567805', 'Jl. Contoh No. 16', '2024-05-08 06:37:52', NULL),
+(156, 'jennifer_king', '', 'user', '0.00', '0.00', '3210987654', 'Jennifer King', '081234567806', 'Jl. Contoh No. 17', '2024-05-08 06:37:52', NULL),
+(157, 'joshua_wright', '', 'user', '0.00', '0.00', '4321098765', 'Joshua Wright', '081234567807', 'Jl. Contoh No. 18', '2024-05-08 06:37:52', NULL),
+(158, 'nicole_lopez', '', 'user', '0.00', '0.00', '2109876543', 'Nicole Lopez', '081234567808', 'Jl. Contoh No. 19', '2024-05-08 06:37:52', NULL),
+(159, 'hill', '', 'user', '0.00', '0.00', '1098765432', 'Andrew Hill', '081234567809', 'Jl. Contoh No. 20', '2024-05-08 06:37:52', NULL),
+(163, 'kia', '', 'user', '0.00', '0.00', '', 'nama kia', '', '', '2024-05-08 07:08:08', 'direktur'),
+(164, 'citra', '', 'user', '0.00', '0.00', '', 'Citra', '', '', '2024-05-08 07:17:08', 'pegawai'),
+(165, 'saya', '', 'user', '0.00', '0.00', '', 'saya', '', '', '2024-05-09 10:55:37', 'pegawai');
 
 -- --------------------------------------------------------
 
@@ -424,6 +461,12 @@ INSERT INTO `tb_warga` (`id`, `nik`, `nama_lengkap`, `no_hp`, `alamat`, `created
 --
 
 --
+-- Indeks untuk tabel `tb_dokumen`
+--
+ALTER TABLE `tb_dokumen`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `tb_payments`
 --
 ALTER TABLE `tb_payments`
@@ -448,16 +491,22 @@ ALTER TABLE `tb_warga`
 --
 
 --
+-- AUTO_INCREMENT untuk tabel `tb_dokumen`
+--
+ALTER TABLE `tb_dokumen`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
 -- AUTO_INCREMENT untuk tabel `tb_payments`
 --
 ALTER TABLE `tb_payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=277;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=278;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_users`
 --
 ALTER TABLE `tb_users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_warga`
