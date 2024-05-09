@@ -1,21 +1,40 @@
+<?php
+// Periksa apakah parameter URL 'upload' memiliki nilai 'ok'
+if (isset($_GET['upload']) && $_GET['upload'] === 'ok') {
+    echo "<script>alert('Upload berhasil');</script>";
+} 
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Form Upload Dokumen</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <h2>Upload Dokumen</h2>
-    <form action="upload.php" method="post" enctype="multipart/form-data">
-        <label for="nama_dokumen">Nama Dokumen:</label>
-        <input type="text" name="nama_dokumen" id="nama_dokumen"><br><br>
-        <label for="file_dokumen">Pilih Dokumen:</label>
-        <input type="file" name="file_dokumen" id="file_dokumen"><br><br>
-        <label for="status_dokumen">Status Dokumen:</label>
-        <select name="status_dokumen" id="status_dokumen">
-            <option value="aktif">Aktif</option>
-            <option value="nonaktif">Nonaktif</option>
-        </select><br><br>
-        <input type="submit" value="Upload Dokumen" name="submit">
-    </form>
+    <div class="container mt-5">
+        <h2>Upload Dokumen</h2>
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="nama_dokumen">Nama Dokumen:</label>
+                <input type="text" class="form-control" name="nama_dokumen" id="nama_dokumen">
+            </div>
+            <div class="form-group">
+                <label for="file_dokumen">Pilih Dokumen:</label>
+                <input type="file" class="form-control-file" name="file_dokumen" id="file_dokumen">
+            </div>
+            <div class="form-group">
+                <label for="status_dokumen">Status Dokumen:</label>
+                <select class="form-control" name="status_dokumen" id="status_dokumen">
+                    <option value="aktif">Aktif</option>
+                    <option value="nonaktif">Nonaktif</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" name="submit">Upload Dokumen</button>
+        </form>
+    </div>
+
 </body>
 </html>

@@ -1,5 +1,10 @@
 <?php
-include '../conf/db_connection.php';
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
+
+include 'conf/db_connection.php';
 
 // Periksa koneksi
 if ($conn->connect_error) {
@@ -39,19 +44,18 @@ $result = mysqli_query($conn, $query);
 <head>
     <title>Daftar Dokumen yang Dapat Diunduh</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-6">
+            <div class="col">
                 <h2>Daftar Dokumen yang Dapat Diunduh</h2>
-
                 <!-- Form pencarian -->
                 <!-- <form action="doc.php" method="GET" class="mb-3"> -->
                 <form action="" method="GET" class="mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Cari berdasarkan nama" name="page" value="viewdoc" hidden>
+                        <input type="text" class="form-control" placeholder="Cari berdasarkan nama" name="page" value="dokumen" hidden>
                         <input type="text" class="form-control" placeholder="Cari berdasarkan nama" name="search" value="<?php echo $search; ?>">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="submit">Cari</button>
@@ -69,6 +73,8 @@ $result = mysqli_query($conn, $query);
                         <tr>
                             <th>No</th>
                             <th>Nama Dokumen</th>
+                            <th>Keterangan</th>
+                            <th>Tanggal</th>
                             <th>Unduh</th>
                         </tr>
                     </thead>
@@ -82,8 +88,10 @@ $result = mysqli_query($conn, $query);
                                 echo "<tr>";
                                 echo "<td>" . $nomor_urut++ . "</td>";
                                 echo "<td>" . $row['nama'] . "</td>";
+                                echo "<td>" . $row['keterangan'] . "</td>";
+                                echo "<td>" . $row['created_at'] . "</td>";
                                 // echo "<td><a href='" . $row['file_path'] . "' download>Unduh</a></td>";
-                                echo "<td><a href='download.php?file=" . basename($row['file_path']) . "' download>Unduh</a></td>";
+                                echo "<td><a href='app/download.php?file=" . basename($row['file_path']) . "' download>Unduh</a></td>";
                                 echo "</tr>";
                                 // localhost/iuran/app/download.php?file=Book4.csv
                             }
@@ -98,18 +106,18 @@ $result = mysqli_query($conn, $query);
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
                         <li class="page-item <?php echo ($hal <= 1) ? 'disabled' : ''; ?>">
-                            <a class="page-link" href="?page=viewdoc&&hal=<?php echo ($hal <= 1) ? 1 : ($hal - 1); ?>&search=<?php echo $search; ?>" aria-label="Previous">
+                            <a class="page-link" href="?page=dokumen&&hal=<?php echo ($hal <= 1) ? 1 : ($hal - 1); ?>&search=<?php echo $search; ?>" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                                 <span class="sr-only">Previous</span>
                             </a>
                         </li>
                         <?php for ($i = max(1, $hal - 1); $i <= min($hal + 1, $total_pages); $i++) { ?>
                             <li class="page-item <?php echo ($hal == $i) ? 'active' : ''; ?>">
-                                <a class="page-link" href="?page=viewdoc&&hal=<?php echo $i; ?>&search=<?php echo $search; ?>"><?php echo $i; ?></a>
+                                <a class="page-link" href="?page=dokumen&&hal=<?php echo $i; ?>&search=<?php echo $search; ?>"><?php echo $i; ?></a>
                             </li>
                         <?php } ?>
                         <li class="page-item <?php echo ($hal >= $total_pages) ? 'disabled' : ''; ?>">
-                            <a class="page-link" href="?page=viewdoc&&hal=<?php echo ($hal >= $total_pages) ? $total_pages : ($hal + 1); ?>&search=<?php echo $search; ?>" aria-label="Next">
+                            <a class="page-link" href="?page=dokumen&&hal=<?php echo ($hal >= $total_pages) ? $total_pages : ($hal + 1); ?>&search=<?php echo $search; ?>" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                                 <span class="sr-only">Next</span>
                             </a>

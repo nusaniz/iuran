@@ -10,13 +10,45 @@ if(isset($_GET["id"])) {
         $nama_dokumen = $_POST['nama_dokumen'];
         $status_dokumen = $_POST['status_dokumen'];
         
-        // Kueri database untuk memperbarui informasi dokumen
-        $query = "UPDATE tb_dokumen SET nama = '$nama_dokumen', status = '$status_dokumen' WHERE id = $id";
+        // Periksa apakah file baru diunggah
+        if(isset($_FILES['file_dokumen']) && $_FILES['file_dokumen']['error'] === UPLOAD_ERR_OK) {
+            $nama_file = $_FILES['file_dokumen']['name'];
+            $lokasi_file = $_FILES['file_dokumen']['tmp_name'];
+            $folder_upload = "uploads/";
+            $file_baru = $folder_upload . basename($nama_file);
 
-        if (mysqli_query($conn, $query)) {
-            echo "Data dokumen berhasil diperbarui.";
+            // Pindahkan file yang diunggah ke folder upload
+            if(move_uploaded_file($lokasi_file, $file_baru)) {
+                // Kueri database untuk memperbarui informasi dokumen
+                $query = "UPDATE tb_dokumen SET nama = '$nama_dokumen', file_path = '$file_baru', status = '$status_dokumen' WHERE id = $id";
+
+                if (mysqli_query($conn, $query)) {
+                    echo "Data dokumen berhasil diperbarui.";
+                    header("Location: index.php?page=dokumen&&update=ok");
+                } else {
+                    echo "Error updating record: " . mysqli_error($conn);
+                    header("Location: index.php?page=dokumen&&update=failed");
+                }
+            } else {
+                echo "Gagal mengunggah file.";
+            }
         } else {
-            echo "Error updating record: " . mysqli_error($conn);
+            // Jika tidak ada file baru yang diunggah, gunakan file path sebelumnya
+            $query_get_file_path = "SELECT file_path FROM tb_dokumen WHERE id = $id";
+            $result_get_file_path = mysqli_query($conn, $query_get_file_path);
+            $row_get_file_path = mysqli_fetch_assoc($result_get_file_path);
+            $file_path_sebelumnya = $row_get_file_path['file_path'];
+
+            // Kueri database untuk memperbarui informasi dokumen
+            $query = "UPDATE tb_dokumen SET nama = '$nama_dokumen', file_path = '$file_path_sebelumnya', status = '$status_dokumen' WHERE id = $id";
+
+            if (mysqli_query($conn, $query)) {
+                echo "Data dokumen berhasil diperbarui.";
+                header("Location: index.php?page=dokumen&&update=ok");
+            } else {
+                echo "Error updating record: " . mysqli_error($conn);
+                header("Location: index.php?page=dokumen&&update=failed");
+            }
         }
     } else {
         echo "Form tidak disubmit.";

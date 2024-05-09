@@ -28,8 +28,10 @@ if(isset($_POST["submit"])) {
         $sql = "INSERT INTO tb_dokumen (nama, file_path, status) VALUES ('$nama_dokumen', '$target_file', '$status_dokumen')";
         if ($conn->query($sql) === TRUE) {
             echo "Dokumen berhasil diupload.";
+            header("Location: index.php?page=adddokumen&&upload=ok");
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
+            header("Location: index.php?page=adddokumen&&upload=failed");
         }
     } else {
         echo "Maaf, terjadi kesalahan saat mengupload dokumen.";

@@ -22,6 +22,8 @@ $sidebar_menu = array(
     // 'add' => 'Add User',
     'warga' => 'Warga',
     'report' => 'Report',
+    'dokumen' => 'Dokumen',
+    'viewdoc' => 'View Dokumen',
     // 'editwarga' => 'editwarga',
     'logout' => 'Logout'
 );
@@ -38,6 +40,16 @@ $pages = array(
     'addwarga' => 'warga/add.php',
     'editwarga' => 'warga/edit.php',
     'report' => 'report.php',
+    'dokumen' => 'managedoc.php',
+    'adddokumen' => 'adddoc.php',
+    'editdoc' => 'editdoc.php',
+    'viewdoc' => 'doc.php',
+        // managedoc (tabel)
+        // addoc (form)
+        // editdoc (form)
+        // upload (script)
+        // updatedoc (script)
+        // doc (tabel view public)
     'logout' => 'logout.php'
 );
 

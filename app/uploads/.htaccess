@@ -1,0 +1,5 @@
+﻿# Prevent directory listing
+Options -Indexes
+
+# Block all access to this directory
+Deny from all
