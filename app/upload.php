@@ -17,6 +17,7 @@ if ($conn->connect_error) {
 if(isset($_POST["submit"])) {
     $nama_dokumen = $_POST['nama_dokumen'];
     $status_dokumen = $_POST['status_dokumen'];
+    $keterangan = $_POST['keterangan'];
     // $role_dokumen = $_POST['role_dokumen'];
     $role_dokumen = isset($_POST['role_dokumen']) ? implode(',', $_POST['role_dokumen']) : '';
     
@@ -30,7 +31,7 @@ if(isset($_POST["submit"])) {
     // Upload file
     if (move_uploaded_file($_FILES["file_dokumen"]["tmp_name"], $target_file)) {
         // Simpan informasi dokumen ke database
-        $sql = "INSERT INTO tb_dokumen (nama, file_path, status, role_dokumen) VALUES ('$nama_dokumen', '$target_file', '$status_dokumen', '$role_dokumen')";
+        $sql = "INSERT INTO tb_dokumen (nama, file_path, status, role_dokumen, keterangan) VALUES ('$nama_dokumen', '$target_file', '$status_dokumen', '$role_dokumen', '$keterangan')";
         if ($conn->query($sql) === TRUE) {
             echo "Dokumen berhasil diupload.";
             header("Location: index.php?page=adddokumen&&upload=ok");

@@ -20,6 +20,7 @@
             $row = mysqli_fetch_assoc($result);
             $nama_dokumen = $row["nama"];
             $status_dokumen = $row["status"];
+            $keterangan = $row["keterangan"];
             // Mendapatkan peran dokumen dari database
             $role_dokumen = explode(',', $row["role_dokumen"]); // Jika peran dokumen disimpan sebagai string dipisahkan oleh koma
         } else {
@@ -47,6 +48,10 @@
             <div class="form-group">
                 <label for="file_dokumen">Pilih File Dokumen Baru:</label>
                 <input type="file" class="form-control-file" name="file_dokumen" id="file_dokumen">
+            </div>
+            <div class="form-group">
+                <label for="keterangan">Keterangan Dokumen:</label>
+                <textarea class="form-control" name="keterangan" id="keterangan"><?php echo htmlspecialchars($keterangan); ?></textarea>
             </div>
             <div class="form-group">
                 <label for="role_dokumen">Role Dokumen:</label>

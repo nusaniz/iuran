@@ -73,6 +73,7 @@ if (isset($_GET['update']) && $_GET['update'] === 'ok') {
                     <th>ID</th>
                     <th>Nama</th>
                     <th>File Path</th>
+                    <th>Ket</th>
                     <th>Role Dokumen</th>
                     <th>Status</th>
                     <th>Created At</th>
@@ -90,6 +91,7 @@ if (isset($_GET['update']) && $_GET['update'] === 'ok') {
                         echo "<td>" . $row['id'] . "</td>";
                         echo "<td>" . $row['nama'] . "</td>";
                         echo "<td>" . $row['file_path'] . "</td>";
+                        echo "<td>" . $row['keterangan'] . "</td>";
                         echo "<td>" . $row['role_dokumen'] . "</td>";
                         echo "<td>" . $row['status'] . "</td>";
                         echo "<td>" . $row['created_at'] . "</td>";

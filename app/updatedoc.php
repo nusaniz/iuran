@@ -9,6 +9,7 @@ if(isset($_GET["id"])) {
     if(isset($_POST["submit"])) {
         $nama_dokumen = $_POST['nama_dokumen'];
         $status_dokumen = $_POST['status_dokumen'];
+        $keterangan = $_POST['keterangan'];
         // $role_dokumen = $_POST['role_dokumen'];
         $role_dokumen = isset($_POST['role_dokumen']) ? implode(',', $_POST['role_dokumen']) : '';
 
@@ -23,7 +24,7 @@ if(isset($_GET["id"])) {
             // Pindahkan file yang diunggah ke folder upload
             if(move_uploaded_file($lokasi_file, $file_baru)) {
                 // Kueri database untuk memperbarui informasi dokumen
-                $query = "UPDATE tb_dokumen SET nama = '$nama_dokumen', file_path = '$file_baru', status = '$status_dokumen' WHERE id = $id";
+                $query = "UPDATE tb_dokumen SET nama = '$nama_dokumen', file_path = '$file_baru', status = '$status_dokumen', keterangan = '$keterangan' WHERE id = $id";
 
                 if (mysqli_query($conn, $query)) {
                     echo "Data dokumen berhasil diperbarui.";
@@ -43,7 +44,7 @@ if(isset($_GET["id"])) {
             $file_path_sebelumnya = $row_get_file_path['file_path'];
 
             // Kueri database untuk memperbarui informasi dokumen
-            $query = "UPDATE tb_dokumen SET nama = '$nama_dokumen', file_path = '$file_path_sebelumnya', status = '$status_dokumen', role_dokumen = '$role_dokumen' WHERE id = $id";
+            $query = "UPDATE tb_dokumen SET nama = '$nama_dokumen', file_path = '$file_path_sebelumnya', status = '$status_dokumen', role_dokumen = '$role_dokumen', keterangan = '$keterangan' WHERE id = $id";
 
             if (mysqli_query($conn, $query)) {
                 echo "Data dokumen berhasil diperbarui.";

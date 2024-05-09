@@ -26,6 +26,11 @@ if (isset($_GET['upload']) && $_GET['upload'] === 'ok') {
                 <input type="file" class="form-control-file" name="file_dokumen" id="file_dokumen">
             </div>
             <div class="form-group">
+                <label for="keterangan">Keterangan Dokumen:</label>
+                <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
+            </div>
+
+            <div class="form-group">
                 <label for="role_dokumen">Role Dokumen:</label>
                 <select name="role_dokumen[]" id="role_dokumen" multiple>
                     <option value="direktur">Direktur</option>
