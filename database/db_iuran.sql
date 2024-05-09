@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 09 Bulan Mei 2024 pada 12.59
+-- Waktu pembuatan: 09 Bulan Mei 2024 pada 13.26
 -- Versi server: 10.4.25-MariaDB
 -- Versi PHP: 8.1.10
 
@@ -42,18 +42,7 @@ CREATE TABLE `tb_dokumen` (
 --
 
 INSERT INTO `tb_dokumen` (`id`, `nama`, `file_path`, `status`, `role_dokumen`, `created_at`, `keterangan`) VALUES
-(23, 'sayur', 'uploads/Book4(2).csv', 'aktif', 'direktur', '2024-05-08 19:08:20', ''),
-(24, 'sdf', 'uploads/tb_payments(1).sql', 'aktif', 'direktur', '2024-05-08 19:08:20', ''),
-(26, 'qqqqqassa', 'uploads/tb_payments.sql', 'aktif', 'direktur,pegawai', '2024-05-08 19:08:40', ''),
-(27, 'qw', 'uploads/Book4.csv', 'aktif', 'direktur,pegawai', '2024-05-08 19:46:08', ''),
-(29, 'aku', 'uploads/halo_export_2024-05-04.csv', 'aktif', 'direktur', '2024-05-09 01:30:07', ''),
-(30, 'angg', 'uploads/halo_export_2024-05-04.csv', 'aktif', '', '2024-05-09 01:31:24', ''),
-(31, 'aji', 'uploads/halo_export_2024-04-28.csv', 'aktif', '', '2024-05-09 01:33:35', ''),
-(32, 'qwqwqwqwqw', 'uploads/halo_export_2024-04-28.csv', 'aktif', '', '2024-05-09 01:33:48', ''),
-(33, 'rahasia', 'uploads/Book4(1).csv', 'aktif', '', '2024-05-09 03:53:38', ''),
-(34, 'coba', 'uploads/halo_export_2024-04-28(1).csv', 'aktif', '', '2024-05-09 09:18:55', ''),
-(35, 'putusan', 'uploads/halo_export_2024-04-28(1).csv', 'aktif', 'direktur,pegawai', '2024-05-09 10:04:50', ''),
-(36, 'yua', 'uploads/Book4(2).csv', 'aktif', 'direktur,pegawai', '2024-05-09 10:12:58', '');
+(7, 'tes dokumen aja', 'uploads/test dokumen.txt', 'aktif', 'direktur', '2024-05-09 11:25:14', 'halo tes keterangan');
 
 -- --------------------------------------------------------
 
@@ -494,7 +483,7 @@ ALTER TABLE `tb_warga`
 -- AUTO_INCREMENT untuk tabel `tb_dokumen`
 --
 ALTER TABLE `tb_dokumen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_payments`
