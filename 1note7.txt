@@ -6,3 +6,12 @@ branch 6
 
 branch 7
 -hapus beberapa tombol aksi user
+
+
+branch 13malam
+app/adddoc.php
+        app/doc.php
+        app/editdoc.php
+        app/updatedoc.php
+        app/upload.php
+        app/uploads/

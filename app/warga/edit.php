@@ -118,13 +118,22 @@ if (mysqli_num_rows($result) == 1) {
                 $alamat
             ); ?></textarea>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
               <label for="role">Role:</label>
               <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
                   <option value="admin">Admin</option>
                   <option value="user">User</option>
               </select>
+          </div> -->
+        <div class="form-group">
+              <label for="role">Role:</label>
+              <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
+            <option value="admin" <?php if($role == "admin") echo "selected"; ?>>admin</option>
+            <option value="user" <?php if($role == "user") echo "selected"; ?>>user</option>
+        </select>
           </div>
+
+          
         <button type="submit" class="btn btn-primary">Update Data</button>
     </form>
 </div>
