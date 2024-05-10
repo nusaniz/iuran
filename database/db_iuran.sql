@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 09 Bulan Mei 2024 pada 13.26
+-- Waktu pembuatan: 10 Bulan Mei 2024 pada 11.17
 -- Versi server: 10.4.25-MariaDB
 -- Versi PHP: 8.1.10
 
@@ -42,7 +42,7 @@ CREATE TABLE `tb_dokumen` (
 --
 
 INSERT INTO `tb_dokumen` (`id`, `nama`, `file_path`, `status`, `role_dokumen`, `created_at`, `keterangan`) VALUES
-(7, 'tes dokumen aja', 'uploads/test dokumen.txt', 'aktif', 'direktur', '2024-05-09 11:25:14', 'halo tes keterangan');
+(7, 'tes dokumen aja', 'uploads/test dokumen.txt', 'aktif', 'direktur,pegawai', '2024-05-09 11:25:14', 'halo tes keterangan');
 
 -- --------------------------------------------------------
 
@@ -353,46 +353,49 @@ CREATE TABLE `tb_users` (
   `user_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('admin','user') NOT NULL DEFAULT 'user',
-  `total_lunas` decimal(10,2) DEFAULT 0.00,
-  `total_belum_bayar` decimal(10,2) DEFAULT 0.00,
+  `role` enum('admin','user','staf') NOT NULL DEFAULT 'user',
+  `jabatan` enum('direktur','pegawai','') DEFAULT NULL,
   `nik` varchar(255) DEFAULT NULL,
   `nama_lengkap` varchar(255) DEFAULT NULL,
   `no_hp` varchar(20) DEFAULT NULL,
   `alamat` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `jabatan` enum('direktur','pegawai') DEFAULT NULL
+  `total_lunas` decimal(10,2) DEFAULT 0.00,
+  `total_belum_bayar` decimal(10,2) DEFAULT 0.00,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `tb_users`
 --
 
-INSERT INTO `tb_users` (`user_id`, `username`, `password`, `role`, `total_lunas`, `total_belum_bayar`, `nik`, `nama_lengkap`, `no_hp`, `alamat`, `created_at`, `jabatan`) VALUES
-(1, 'admin', '', 'admin', '0.00', '0.00', '', 'Admin', '', '', '2024-05-08 06:48:03', NULL),
-(140, 'john_doe', '', 'user', '0.00', '0.00', '1234567890', 'John Doe', '081234567890', 'Jl. Contoh No. 1', '2024-05-08 06:37:52', NULL),
-(141, 'jane_doe', '', 'user', '0.00', '0.00', '0987654321', 'Jane Doe', '081234567891', 'Jl. Contoh No. 2', '2024-05-08 06:37:52', NULL),
-(142, 'alice_smith', '', 'user', '0.00', '0.00', '2345678901', 'Alice Smith', '081234567892', 'Jl. Contoh No. 3', '2024-05-08 06:37:52', 'pegawai'),
-(143, 'bob_johnson', '', 'user', '0.00', '0.00', '3456789012', 'Bob Johnson', '081234567893', 'Jl. Contoh No. 4', '2024-05-08 06:37:52', NULL),
-(144, 'emily_brown', '', 'user', '0.00', '0.00', '4567890123', 'Emily Brown', '081234567894', 'Jl. Contoh No. 5', '2024-05-08 06:37:52', NULL),
-(145, 'michael_wilson', '', 'user', '0.00', '0.00', '5678901234', 'Michael Wilson', '081234567895', 'Jl. Contoh No. 6', '2024-05-08 06:37:52', NULL),
-(146, 'sarah_garcia', '', 'admin', '0.00', '0.00', '6789012345', 'Sarah Garcia', '081234567896', 'Jl. Contoh No. 7', '2024-05-08 06:37:52', NULL),
-(147, 'david_martinez', '', 'user', '0.00', '0.00', '7890123456', 'David Martinez', '081234567897', 'Jl. Contoh No. 8', '2024-05-08 06:37:52', NULL),
-(148, 'lisa_robinson', '', 'user', '0.00', '0.00', '8901234567', 'Lisa Robinson', '081234567898', 'Jl. Contoh No. 9', '2024-05-08 06:37:52', NULL),
-(149, 'paul_clark', '', 'user', '0.00', '0.00', '9012345678', 'Paul Clark', '081234567899', 'Jl. Contoh No. 10', '2024-05-08 06:37:52', NULL),
-(150, 'jessica_lewis', '', 'user', '0.00', '0.00', '0123456789', 'Jessica Lewis', '081234567800', 'Jl. Contoh No. 11', '2024-05-08 06:37:52', NULL),
-(151, 'kevin_lee', '', 'user', '0.00', '0.00', '5432109876', 'Kevin Lee', '081234567801', 'Jl. Contoh No. 12', '2024-05-08 06:37:52', NULL),
-(152, 'amanda_walker', '', 'user', '0.00', '0.00', '6543210987', 'Amanda Walker', '081234567802', 'Jl. Contoh No. 13', '2024-05-08 06:37:52', NULL),
-(153, 'daniel_hall', '', 'user', '0.00', '0.00', '7654321098', 'Daniel Hall', '081234567803', 'Jl. Contoh No. 14', '2024-05-08 06:37:52', NULL),
-(154, 'ashley_young', '', 'user', '0.00', '0.00', '8765432109', 'Ashley Young', '081234567804', 'Jl. Contoh No. 15', '2024-05-08 06:37:52', NULL),
-(155, 'matthew_hernandez', '', 'user', '0.00', '0.00', '9876543210', 'Matthew Hernandez', '081234567805', 'Jl. Contoh No. 16', '2024-05-08 06:37:52', NULL),
-(156, 'jennifer_king', '', 'user', '0.00', '0.00', '3210987654', 'Jennifer King', '081234567806', 'Jl. Contoh No. 17', '2024-05-08 06:37:52', NULL),
-(157, 'joshua_wright', '', 'user', '0.00', '0.00', '4321098765', 'Joshua Wright', '081234567807', 'Jl. Contoh No. 18', '2024-05-08 06:37:52', NULL),
-(158, 'nicole_lopez', '', 'user', '0.00', '0.00', '2109876543', 'Nicole Lopez', '081234567808', 'Jl. Contoh No. 19', '2024-05-08 06:37:52', NULL),
-(159, 'hill', '', 'user', '0.00', '0.00', '1098765432', 'Andrew Hill', '081234567809', 'Jl. Contoh No. 20', '2024-05-08 06:37:52', NULL),
-(163, 'kia', '', 'user', '0.00', '0.00', '', 'nama kia', '', '', '2024-05-08 07:08:08', 'direktur'),
-(164, 'citra', '', 'user', '0.00', '0.00', '', 'Citra', '', '', '2024-05-08 07:17:08', 'pegawai'),
-(165, 'saya', '', 'user', '0.00', '0.00', '', 'saya', '', '', '2024-05-09 10:55:37', 'pegawai');
+INSERT INTO `tb_users` (`user_id`, `username`, `password`, `role`, `jabatan`, `nik`, `nama_lengkap`, `no_hp`, `alamat`, `total_lunas`, `total_belum_bayar`, `created_at`) VALUES
+(1, 'admin', '', 'admin', NULL, '', 'Admin', '', '', '0.00', '0.00', '2024-05-08 06:48:03'),
+(140, 'john_doe', '', 'admin', 'direktur', '1234567890', 'John Doe', '081234567890', 'Jl. Contoh No. 1', '0.00', '0.00', '2024-05-08 06:37:52'),
+(141, 'jane_doe', '', 'user', NULL, '0987654321', 'Jane Doe', '081234567891', 'Jl. Contoh No. 2', '0.00', '0.00', '2024-05-08 06:37:52'),
+(142, 'alice_smith', '', 'staf', 'direktur', '2345678901', 'Alice Smith', '081234567892', 'Jl. Contoh No. 3', '0.00', '0.00', '2024-05-08 06:37:52'),
+(143, 'bob_johnson', '', 'user', NULL, '3456789012', 'Bob Johnson', '081234567893', 'Jl. Contoh No. 4', '0.00', '0.00', '2024-05-08 06:37:52'),
+(144, 'emily_brown', '', 'user', NULL, '4567890123', 'Emily Brown', '081234567894', 'Jl. Contoh No. 5', '0.00', '0.00', '2024-05-08 06:37:52'),
+(145, 'michael_wilson', '', 'user', NULL, '5678901234', 'Michael Wilson', '081234567895', 'Jl. Contoh No. 6', '0.00', '0.00', '2024-05-08 06:37:52'),
+(146, 'sarah_garcia', '', 'admin', NULL, '6789012345', 'Sarah Garcia', '081234567896', 'Jl. Contoh No. 7', '0.00', '0.00', '2024-05-08 06:37:52'),
+(147, 'david_martinez', '', 'user', NULL, '7890123456', 'David Martinez', '081234567897', 'Jl. Contoh No. 8', '0.00', '0.00', '2024-05-08 06:37:52'),
+(148, 'lisa_robinson', '', 'user', NULL, '8901234567', 'Lisa Robinson', '081234567898', 'Jl. Contoh No. 9', '0.00', '0.00', '2024-05-08 06:37:52'),
+(149, 'paul_clark', '', 'user', NULL, '9012345678', 'Paul Clark', '081234567899', 'Jl. Contoh No. 10', '0.00', '0.00', '2024-05-08 06:37:52'),
+(150, 'jessica_lewis', '', 'user', NULL, '0123456789', 'Jessica Lewis', '081234567800', 'Jl. Contoh No. 11', '0.00', '0.00', '2024-05-08 06:37:52'),
+(151, 'kevin_lee', '', 'user', NULL, '5432109876', 'Kevin Lee', '081234567801', 'Jl. Contoh No. 12', '0.00', '0.00', '2024-05-08 06:37:52'),
+(152, 'amanda_walker', '', 'user', NULL, '6543210987', 'Amanda Walker', '081234567802', 'Jl. Contoh No. 13', '0.00', '0.00', '2024-05-08 06:37:52'),
+(153, 'daniel_hall', '', 'user', NULL, '7654321098', 'Daniel Hall', '081234567803', 'Jl. Contoh No. 14', '0.00', '0.00', '2024-05-08 06:37:52'),
+(154, 'ashley_young', '', 'user', 'pegawai', '8765432109', 'Ashley Young', '081234567804', 'Jl. Contoh No. 15', '0.00', '0.00', '2024-05-08 06:37:52'),
+(155, 'matthew_hernandez', '', 'user', NULL, '9876543210', 'Matthew Hernandez', '081234567805', 'Jl. Contoh No. 16', '0.00', '0.00', '2024-05-08 06:37:52'),
+(156, 'jennifer_king', '', 'user', NULL, '3210987654', 'Jennifer King', '081234567806', 'Jl. Contoh No. 17', '0.00', '0.00', '2024-05-08 06:37:52'),
+(157, 'joshua_wright', '', 'user', NULL, '4321098765', 'Joshua Wright', '081234567807', 'Jl. Contoh No. 18', '0.00', '0.00', '2024-05-08 06:37:52'),
+(158, 'nicole_lopez', '', 'user', NULL, '2109876543', 'Nicole Lopez', '081234567808', 'Jl. Contoh No. 19', '0.00', '0.00', '2024-05-08 06:37:52'),
+(159, 'hill', '', 'user', NULL, '1098765432', 'Andrew Hill', '081234567809', 'Jl. Contoh No. 20', '0.00', '0.00', '2024-05-08 06:37:52'),
+(163, 'kia', '', 'user', 'direktur', '', 'nama kia', '', '', '0.00', '0.00', '2024-05-08 07:08:08'),
+(164, 'citra', '', 'user', 'pegawai', '', 'Citra', '', '', '0.00', '0.00', '2024-05-08 07:17:08'),
+(165, 'saya', '', 'user', 'pegawai', '', 'saya', '', '', '0.00', '0.00', '2024-05-09 10:55:37'),
+(166, 'aura', '', 'staf', 'pegawai', '', 'Aura Permata', '', '', '0.00', '0.00', '2024-05-10 02:08:04'),
+(167, 'malam', '', 'staf', '', '', 'malam', '', '', '0.00', '0.00', '2024-05-10 02:45:10'),
+(168, 'siang', '', 'admin', 'pegawai', '', 'siang', '', '', '0.00', '0.00', '2024-05-10 02:46:04');
 
 -- --------------------------------------------------------
 
@@ -483,7 +486,7 @@ ALTER TABLE `tb_warga`
 -- AUTO_INCREMENT untuk tabel `tb_dokumen`
 --
 ALTER TABLE `tb_dokumen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_payments`
@@ -495,7 +498,7 @@ ALTER TABLE `tb_payments`
 -- AUTO_INCREMENT untuk tabel `tb_users`
 --
 ALTER TABLE `tb_users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=169;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_warga`
