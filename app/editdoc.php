@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Form Edit Dokumen</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+
 <body>
     <?php
     include '../conf/db_connection.php';
@@ -33,7 +35,7 @@
     }
     ?>
 
-<div class="container mt-5">
+    <div class="container mt-5">
         <h2>Edit Dokumen</h2>
         <form action="updatedoc.php?id=<?php echo $id; ?>" method="post" enctype="multipart/form-data">
             <div class="form-group">
@@ -42,41 +44,92 @@
             </div>
             <div class="form-group">
                 <label for="nama_dokumen">Nama Dokumen:</label>
-                <input type="text" class="form-control" name="nama_dokumen" id="nama_dokumen" value="<?php echo $nama_dokumen; ?>">
+                <input type="text" class="form-control" name="nama_dokumen" id="nama_dokumen"
+                    value="<?php echo $nama_dokumen; ?>">
             </div>
-    
+
             <div class="form-group">
                 <label for="file_dokumen">Pilih File Dokumen Baru:</label>
                 <input type="file" class="form-control-file" name="file_dokumen" id="file_dokumen">
             </div>
             <div class="form-group">
                 <label for="keterangan">Keterangan Dokumen:</label>
-                <textarea class="form-control" name="keterangan" id="keterangan"><?php echo htmlspecialchars($keterangan); ?></textarea>
+                <textarea class="form-control" name="keterangan"
+                    id="keterangan"><?php echo htmlspecialchars($keterangan); ?></textarea>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="role_dokumen">Role Dokumen:</label>
-                <!-- <select name="role_dokumen[]" id="role_dokumen" multiple>
+                <select name="role_dokumen[]" id="role_dokumen" multiple>
                 <option value="direktur">Direktur</option>
                     <option value="pegawai">Pegawai</option>
                     <option value="nilai3">Nilai 3</option>
                     <option value="">NULL</option>
-                </select> -->
+                </select>
                 <select name="role_dokumen[]" id="role_dokumen" multiple>
-                    <option value="direktur" <?php if(in_array("direktur", $role_dokumen)) echo "selected"; ?>>Direktur</option>
-                    <option value="pegawai" <?php if(in_array("pegawai", $role_dokumen)) echo "selected"; ?>>Pegawai</option>
-                    <option value="nilai3" <?php if(in_array("nilai3", $role_dokumen)) echo "selected"; ?>>Nilai 3</option>
+                    <option value="direktur" <?php if(in_array("direktur", $role_dokumen)) echo "selected"; ?>>Direktur
+                    </option>
+                    <option value="pegawai" <?php if(in_array("pegawai", $role_dokumen)) echo "selected"; ?>>Pegawai
+                    </option>
+                    <option value="nilai3" <?php if(in_array("nilai3", $role_dokumen)) echo "selected"; ?>>Nilai 3
+                    </option>
                     <option value="" <?php if(in_array("", $role_dokumen)) echo "selected"; ?>>NULL</option>
                 </select>
-            </div>
+            </div> -->
+
             <div class="form-group">
+    <label for="role_dokumen">Role Dokumen:</label>
+    <select name="role_dokumen[]" id="role_dokumen" multiple>
+        <?php
+        // Ambil data enum dari kolom role_dokumen di tabel tb_dokumen
+        $result = $conn->query("SHOW COLUMNS FROM tb_dokumen LIKE 'role_dokumen'");
+        $row = $result->fetch_assoc();
+        $enum_str = $row["Type"];
+        preg_match_all("/'([^']+)'/", $enum_str, $matches);
+        $enums = $matches[1];
+
+        // Loop melalui masing-masing enum untuk membuat opsi <select>
+        foreach ($enums as $enum) {
+            // Periksa apakah nilai enum ada dalam array $role_dokumen
+            $selected = (in_array($enum, $role_dokumen)) ? 'selected' : '';
+            echo '<option value="' . $enum . '" ' . $selected . '>' . $enum . '</option>';
+        }
+        ?>
+    </select>
+</div>
+
+
+
+            <!-- <div class="form-group">
                 <label for="status_dokumen">Status Dokumen:</label>
                 <select class="form-control" name="status_dokumen" id="status_dokumen">
                     <option value="aktif" <?php if($status_dokumen == "aktif") echo "selected"; ?>>Aktif</option>
                     <option value="nonaktif" <?php if($status_dokumen == "nonaktif") echo "selected"; ?>>Nonaktif</option>
+                </select>
+            </div> -->
+            <div class="form-group">
+                <label for="status_dokumen">Status Dokumen:</label>
+                <select class="selectpicker form-control" id="status_dokumen" name="status_dokumen"
+                    data-live-search="true">
+                    <?php
+                    // Query untuk mendapatkan nilai-nilai enum dari kolom status
+                    $enum_query = "SHOW COLUMNS FROM tb_dokumen WHERE Field = 'status'";
+                    $enum_result = mysqli_query($conn, $enum_query);
+                    $enum_row = mysqli_fetch_assoc($enum_result);
+                    // Mengambil nilai enum dari kolom status
+                    $enum_values = explode("','", substr($enum_row['Type'], 6, -2));
+                    
+                    // Buat opsi dropdown sesuai dengan nilai-nilai enum
+                    foreach ($enum_values as $value) {
+                        // Tentukan apakah opsi ini dipilih
+                        $selected = ($status_dokumen == $value) ? "selected" : "";
+                        echo '<option value="' . $value . '"' . $selected . '>' . ucfirst($value) . '</option>';
+                    }
+                    ?>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary" name="submit">Simpan Perubahan</button>
         </form>
     </div>
 </body>
+
 </html>

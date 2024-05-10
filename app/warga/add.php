@@ -1,3 +1,5 @@
+<?php include '..\conf\db_connection.php';?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,20 +53,59 @@
             <label for="alamat">Alamat:</label>
             <textarea class="form-control" id="alamat" name="alamat"></textarea>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="role">Role:</label>
             <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
                 <option value="admin">Admin</option>
                 <option value="user">User</option>
             </select>
-        </div>
+        </div> -->
         <div class="form-group">
+        <label for="role">Role:</label>
+        <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
+        <option value="" selected disabled>Pilih role</option>
+        <?php
+            // Query untuk mendapatkan nilai-nilai enum dari kolom role
+            $enum_query = "SHOW COLUMNS FROM tb_users WHERE Field = 'role'";
+            $enum_result = mysqli_query($conn, $enum_query);
+            $enum_row = mysqli_fetch_assoc($enum_result);
+            // Mengambil nilai enum dari kolom role
+            $enum_values = explode("','", substr($enum_row['Type'], 6, -2));
+            
+            // Buat opsi dropdown sesuai dengan nilai-nilai enum
+            foreach ($enum_values as $value) {
+                echo '<option value="' . $value . '">' . ucfirst($value) . '</option>';
+            }
+            ?>
+        </select>
+        </div>
+        <!-- <div class="form-group">
             <label for="jabatan">Jabatan:</label>
             <select class="selectpicker form-control" id="jabatan" name="jabatan" data-live-search="true">
                 <option value="direktur">direktur</option>
                 <option value="pegawai">pegawai</option>
             </select>
+        </div> -->
+        <div class="form-group">
+            <label for="jabatan">Jabatan:</label> <!-- Ubah label -->
+            <select class="selectpicker form-control" id="jabatan" name="jabatan" data-live-search="true">
+            <option value="" selected disabled>Pilih jabatan</option>
+                <?php
+                // Query untuk mendapatkan nilai-nilai enum dari kolom jabatan
+                $enum_query = "SHOW COLUMNS FROM tb_users WHERE Field = 'jabatan'"; // Ubah 'role' menjadi 'jabatan'
+                $enum_result = mysqli_query($conn, $enum_query);
+                $enum_row = mysqli_fetch_assoc($enum_result);
+                // Mengambil nilai enum dari kolom jabatan
+                $enum_values = explode("','", substr($enum_row['Type'], 6, -2));
+                
+                // Buat opsi dropdown sesuai dengan nilai-nilai enum
+                foreach ($enum_values as $value) {
+                    echo '<option value="' . $value . '">' . ucfirst($value) . '</option>';
+                }
+                ?>
+            </select>
         </div>
+
         <button type="submit" class="btn btn-primary">Tambah Data</button>
     </form>
 </div>

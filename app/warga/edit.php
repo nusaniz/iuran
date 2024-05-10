@@ -14,10 +14,11 @@ if (mysqli_connect_errno()) {
 
 // Inisialisasi variabel
 $id = $nik = $nama_lengkap = $no_hp = $alamat = "";
+// $id = $nik = $nama_lengkap = $no_hp = $alamat = $username = $password = $role = $jabatan = "";
 
 // Periksa apakah parameter id ada dan valid
 if (!isset($_GET["id"]) || empty($_GET["id"]) || !is_numeric($_GET["id"])) {
-    echo "ID tidak valid.";
+    echo "Invalid ID.";
     exit();
 }
 
@@ -61,7 +62,7 @@ if (mysqli_num_rows($result) == 1) {
     $no_hp = $row["no_hp"];
     $alamat = $row["alamat"];
     $role = $row["role"];
-    $jabatan = ["jabatan"];
+    $jabatan = $row["jabatan"]; // Change this line
 } else {
     echo "Data warga tidak ditemukan.";
     exit();
@@ -70,84 +71,137 @@ if (mysqli_num_rows($result) == 1) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Data Warga</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+
 <body>
 
-<div class="container">
-    <h2 class="mt-4">Edit Data Warga</h2>
-    <!-- <form method="post" action="<?php echo htmlspecialchars(
+    <div class="container">
+        <h2 class="mt-4">Edit Data Warga</h2>
+        <!-- <form method="post" action="<?php echo htmlspecialchars(
         $_SERVER["PHP_SELF"]
     ) . "?id=$id"; ?>"> -->
-    <form method="post" action="">
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars(
+        <form method="post" action="">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars(
                 $username
             ); ?>">
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="text" class="form-control" id="password" name="password" value="<?php echo htmlspecialchars(
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="text" class="form-control" id="password" name="password" value="<?php echo htmlspecialchars(
                 $password
             ); ?>">
-        </div>
-        <div class="form-group">
-            <label for="nik">NIK:</label>
-            <input type="text" class="form-control" id="nik" name="nik" value="<?php echo htmlspecialchars(
+            </div>
+            <div class="form-group">
+                <label for="nik">NIK:</label>
+                <input type="text" class="form-control" id="nik" name="nik" value="<?php echo htmlspecialchars(
                 $nik
             ); ?>">
-        </div>
-        <div class="form-group">
-            <label for="nama_lengkap">Nama Lengkap:</label>
-            <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="<?php echo htmlspecialchars(
+            </div>
+            <div class="form-group">
+                <label for="nama_lengkap">Nama Lengkap:</label>
+                <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="<?php echo htmlspecialchars(
                 $nama_lengkap
             ); ?>">
-        </div>
-        <div class="form-group">
-            <label for="no_hp">Nomor HP:</label>
-            <input type="text" class="form-control" id="no_hp" name="no_hp" value="<?php echo htmlspecialchars(
+            </div>
+            <div class="form-group">
+                <label for="no_hp">Nomor HP:</label>
+                <input type="text" class="form-control" id="no_hp" name="no_hp" value="<?php echo htmlspecialchars(
                 $no_hp
             ); ?>">
-        </div>
-        <div class="form-group">
-            <label for="alamat">Alamat:</label>
-            <textarea class="form-control" id="alamat" name="alamat"><?php echo htmlspecialchars(
+            </div>
+            <div class="form-group">
+                <label for="alamat">Alamat:</label>
+                <textarea class="form-control" id="alamat" name="alamat"><?php echo htmlspecialchars(
                 $alamat
             ); ?></textarea>
-        </div>
-        <!-- <div class="form-group">
+            </div>
+            <!-- <div class="form-group">
               <label for="role">Role:</label>
               <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
                   <option value="admin">Admin</option>
                   <option value="user">User</option>
               </select>
           </div> -->
-        <div class="form-group">
-              <label for="role">Role:</label>
-              <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
-            <option value="admin" <?php if($role == "admin") echo "selected"; ?>>admin</option>
-            <option value="user" <?php if($role == "user") echo "selected"; ?>>user</option>
-            </select>
+
+          <!-- pilih manual -->
+            <!-- <div class="form-group">
+                <label for="role">Role:</label>
+                <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
+                    <option value="admin" <?php if($role == "admin") echo "selected"; ?>>admin</option>
+                    <option value="user" <?php if($role == "user") echo "selected"; ?>>user</option>
+                </select>
+            </div> -->
+
+
+<!-- ujicoba -->
+<div class="form-group">
+        <label for="role">Role:</label>
+        <select class="selectpicker form-control" id="role" name="role" data-live-search="true">
+    <?php
+    // Query untuk mendapatkan nilai-nilai enum dari kolom role
+    $enum_query = "SHOW COLUMNS FROM tb_users WHERE Field = 'role'";
+    $enum_result = mysqli_query($conn, $enum_query);
+    $enum_row = mysqli_fetch_assoc($enum_result);
+    // Mengambil nilai enum dari kolom role
+    $enum_values = explode("','", substr($enum_row['Type'], 6, -2));
+    
+    // Buat opsi dropdown sesuai dengan nilai-nilai enum
+    foreach ($enum_values as $value) {
+        // Tentukan apakah opsi ini dipilih
+        $selected = ($role == $value) ? "selected" : "";
+        echo '<option value="' . $value . '"' . $selected . '>' . ucfirst($value) . '</option>';
+    }
+    ?>
+</select>
         </div>
-        <div class="form-group">
-              <label for="jabatan">Jabatan:</label>
-              <select class="selectpicker form-control" id="jabatan" name="jabatan" data-live-search="true">
-            <option value="direktur" <?php if($jabatan == "direktur") echo "selected"; ?>>direktur</option>
-            <option value="pegawai" <?php if($jabatan == "pegawai") echo "selected"; ?>>pegawai</option>
-            </select>
+<!-- /// ujicoba -->
+
+            <!-- <div class="form-group">
+                <label for="jabatan">Jabatan:</label>
+                <select class="selectpicker form-control" id="jabatan" name="jabatan" data-live-search="true">
+                    <option value="direktur" <?php if($jabatan == "direktur") echo "selected"; ?>>direktur</option>
+                    <option value="pegawai" <?php if($jabatan == "pegawai") echo "selected"; ?>>pegawai</option>
+                </select>
+            </div> -->
+
+            <div class="form-group">
+        <label for="jabatan">jabatan:</label>
+        <select class="selectpicker form-control" id="jabatan" name="jabatan" data-live-search="true">
+    <?php
+    // Query untuk mendapatkan nilai-nilai enum dari kolom jabatan
+    $enum_query = "SHOW COLUMNS FROM tb_users WHERE Field = 'jabatan'";
+    $enum_result = mysqli_query($conn, $enum_query);
+    $enum_row = mysqli_fetch_assoc($enum_result);
+    // Mengambil nilai enum dari kolom jabatan
+    $enum_values = explode("','", substr($enum_row['Type'], 6, -2));
+    
+    // Buat opsi dropdown sesuai dengan nilai-nilai enum
+    foreach ($enum_values as $value) {
+        // Tentukan apakah opsi ini dipilih
+        $selected = ($jabatan == $value) ? "selected" : "";
+        echo '<option value="' . $value . '"' . $selected . '>' . ucfirst($value) . '</option>';
+    }
+    ?>
+</select>
         </div>
 
-          
-        <button type="submit" class="btn btn-primary">Update Data</button>
-    </form>
-</div>
+
+
+
+            <button type="submit" class="btn btn-primary">Update Data</button>
+        </form>
+    </div>
 
 </body>
+
 </html>
 
 <?php // Tutup conn
