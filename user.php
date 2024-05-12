@@ -79,6 +79,12 @@ $total_nominal_lunas = $row_lunas['total_nominal_lunas'];
     <title>Dashboard Pengguna - Aplikasi Pencatat Iuran Warga</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+       /* Tambahkan warna hijau pada sel tabel dengan status "lunas" */
+        td[data-status="lunas"] {
+            background-color: #c8e6c9; /* Warna hijau */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -114,7 +120,8 @@ $total_nominal_lunas = $row_lunas['total_nominal_lunas'];
                             <th scope="col">Kode Transaksi</th>
                             <th scope="col">Jumlah Tagihan</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Tanggal Pembayaran</th>
+                            <th scope="col">Tgl Tagihan</th>
+                            <th scope="col">Tgl Pembayaran</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,7 +132,9 @@ $total_nominal_lunas = $row_lunas['total_nominal_lunas'];
                                 <td><?php echo $no++; ?></td>
                                 <td><?php echo $row['kode_transaksi']; ?></td>
                                 <td><?php echo $row['amount']; ?></td>
-                                <td><?php echo $row['status']; ?></td>
+                                <!-- <td><?php echo $row['status']; ?></td> -->
+                                <?php echo "<td data-status='" . $row['status'] . "'>" . $row['status'] . "</td>";?>
+                                <td><?php echo $row['invoice_date']; ?></td>
                                 <td><?php echo $row['payment_date']; ?></td>
                             </tr>
                         <?php endwhile; ?>
